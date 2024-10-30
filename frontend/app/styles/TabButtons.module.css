@@ -1,0 +1,113 @@
+.tabButtonsContainer {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.tabButtonsContainer.visible {
+  opacity: 1;
+}
+
+.tabButton {
+  padding: 10px 20px;
+  font-size: 20px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 0 10px;
+  animation: growButton 0.5s ease-out forwards;
+  opacity: 0;
+  transform: scale(0);
+  transition: background-color 0.3s ease, border-radius 0.3s ease, transform 0.3s ease;
+}
+
+.tabButton.exiting {
+  animation: shrinkButton 0.5s ease-in forwards;
+}
+
+.tabButton.hoverGrow:hover {
+  transform: scale(1.1) !important;
+}
+
+@keyframes growButton {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shrinkButton {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .tabButtonsContainer {
+    top: 2%; /* Adjusted for mobile */
+    width: 90%; /* Control the width on mobile */
+    align-items: center;
+  }
+
+  /* Mobile-specific animations */
+  @keyframes growButton {
+    0% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes shrinkButton {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    40% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0);
+    }
+  }
+
+  /* Adjust hover effect for mobile */
+  .tabButton.hoverGrow:hover {
+    transform: scale(1.05) !important; /* Smaller scale effect on mobile */
+  }
+}
+
