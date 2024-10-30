@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import styles from '@/app/styles/TabButtons.module.css';
 import { police } from '../styles/fonts';

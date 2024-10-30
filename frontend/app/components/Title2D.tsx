@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text } from '@react-three/drei';
 import { colors } from '@/app/styles/styles';
-import { useThree } from '@react-three/fiber';
 
 export const Title2D: React.FC = () => {
   const isMobile = window.innerWidth <= 768; // This threshold might need adjustment based on your needs
@@ -31,7 +30,7 @@ export const Title2D: React.FC = () => {
           font="/fonts/New Pizza.otf"
           letterSpacing={0.01}
         >
-          Po'pote
+          Po&apospote
         </Text>
       </group>
     );
@@ -49,7 +48,7 @@ export const Title2D: React.FC = () => {
       font="/fonts/New Pizza.otf"
       letterSpacing={0.01}
     >
-      Pizza Po'pote
+      Pizza Po&apospote
     </Text>
   );
 };

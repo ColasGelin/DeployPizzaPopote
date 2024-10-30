@@ -34,15 +34,6 @@ export const useSceneController = () => {
   const [discoverPosition, setDiscoverPosition] = useState<Position>(
     isMobile ? mobileDiscoverPosition : desktopDiscoverPosition
   );
-  const [defaultTabPosition, setDefaultTabPosition] = useState<Position>(
-    isMobile ? mobileDefaultTabPosition : desktopDefaultTabPosition
-  );
-  const [equipePosition, setEquipePosition] = useState<Position>(
-    isMobile ? mobileEquipePosition : desktopEquipePosition
-  );
-  const [pizzasPosition, setPizzasPosition] = useState<Position>(
-    isMobile ? mobilePizzasPosition : desktopPizzasPosition
-  );
 
   // Other state variables
   const defaultLookAt: Position = { x: 0, y: 1, z: 0 };
@@ -109,9 +100,6 @@ export const useSceneController = () => {
       // Update all position states
       setInitialPosition(newIsMobile ? initialMobilePosition : initialDesktopPosition);
       setDiscoverPosition(newIsMobile ? mobileDiscoverPosition : desktopDiscoverPosition);
-      setDefaultTabPosition(newIsMobile ? mobileDefaultTabPosition : desktopDefaultTabPosition);
-      setEquipePosition(newIsMobile ? mobileEquipePosition : desktopEquipePosition);
-      setPizzasPosition(newIsMobile ? mobilePizzasPosition : desktopPizzasPosition);
       
       // Update actual camera position based on current state
       if (!zoom) {

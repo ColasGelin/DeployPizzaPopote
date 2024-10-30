@@ -1,3 +1,5 @@
+'use client'
+
 import React, { ReactNode, useState, useEffect } from 'react';
 import { Chewy } from 'next/font/google';
 import { colors } from '../styles/styles';

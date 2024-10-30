@@ -1,5 +1,3 @@
-import { colors } from '@/app/styles/styles';
-
 type PlaneItem = {
     imageUrl: string;
     position: [number, number];

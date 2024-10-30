@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Text } from '@react-three/drei';
 import { colors } from '@/app/styles/styles';
 import { useFrame } from '@react-three/fiber';

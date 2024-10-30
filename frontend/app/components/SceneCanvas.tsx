@@ -6,8 +6,6 @@ import { Text2D } from './Text2D';
 import NewsPlaneBackground from './NewsPlaneBackground';
 import { AnimatedTrees } from './AnimatedTrees';
 import { AnimatedCaravan } from './AnimatedCaravan';
-import { PlaneBackgroundConfig } from './PlaneBackgroundConfig';
-import { is } from '@react-three/fiber/dist/declarations/src/core/utils';
 import { Title2D } from './Title2D';
 
 interface SceneCanvasProps {

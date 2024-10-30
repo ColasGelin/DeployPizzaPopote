@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { useSceneController } from '../hooks/useSceneController';
 import SceneCanvas from './SceneCanvas';

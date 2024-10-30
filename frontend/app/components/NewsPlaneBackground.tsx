@@ -1,5 +1,6 @@
+'use client'
+
 import React, { useEffect, useState } from 'react';
-import { colors } from '@/app/styles/styles';
 import { PlaneBackgroundConfig } from '@/app/components/PlaneBackgroundConfig';
 import PlaneBackground from '@/app/components/PlaneBackground';
 
@@ -55,7 +56,6 @@ interface Post {
   updatedAt: string;
   publishedAt: string;
   locale: null;
-  localizations: any[];
 }
 
 interface NewsResponse {

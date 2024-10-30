@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useRef, useEffect, useState } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { Plane, Text } from '@react-three/drei';
@@ -79,7 +81,7 @@ const PlaneBackground: React.FC<PlaneBackgroundProps> = ({
     Promise.all(
       items.map(item =>
         new Promise<THREE.Texture>((resolve) => {
-          const texture = textureLoader.load(item.imageUrl, (loadedTexture) => {
+          textureLoader.load(item.imageUrl, (loadedTexture) => {
             loadedTexture.needsUpdate = true;
             resolve(loadedTexture);
           });
@@ -110,27 +112,6 @@ const PlaneBackground: React.FC<PlaneBackgroundProps> = ({
       pos[1] * planeHeight,
       0.01 + index * 0.001
     ];
-  };
-
-  // Text rendering component
-  const renderTextBox = (textItem: TextItem, position: [number, number, number]) => {
-    const boxWidth = textItem.boxWidth || 0.3;
-    return (
-      <group position={new Vector3(...position)}>
-        <Text
-          position={[0, 0, 0.002]}
-          fontSize={textItem.size || 0.03}
-          color={textItem.color || "white"}
-          anchorX="center"
-          anchorY="middle"
-          maxWidth={boxWidth - 0.02}
-          overflowWrap="break-word"
-          font="/fonts/BulletJournal.otf"
-        >
-          {textItem.text}
-        </Text>
-      </group>
-    );
   };
 
   // Early return if not ready

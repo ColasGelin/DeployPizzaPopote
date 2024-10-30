@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { colors } from '@/app/styles/styles';
 interface LoadingScreenProps {
