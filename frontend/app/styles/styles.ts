@@ -1,3 +1,5 @@
+'use client'
+
 import { police } from './fonts';
 
 export const colors = {

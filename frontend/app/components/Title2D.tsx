@@ -1,9 +1,17 @@
+'use client'
+
 import React from 'react';
+import { useEffect, useState} from 'react';
 import { Text } from '@react-three/drei';
 import { colors } from '@/app/styles/styles';
 
 export const Title2D: React.FC = () => {
-  const isMobile = window.innerWidth <= 768; // This threshold might need adjustment based on your needs
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
 
   if (isMobile) {
     return (

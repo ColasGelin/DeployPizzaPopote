@@ -1,9 +1,14 @@
+'use client'
+
 import { useState, useEffect, useRef } from 'react';
 
 export const useSceneController = () => {
 
+  const [isMobile, setIsMobile] = useState(false);
 
-  const isMobile = window.innerWidth <= 768;
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
 
   interface Position {
     x: number;
