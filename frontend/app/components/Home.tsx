@@ -51,6 +51,8 @@ export default function Home() {
         playCaravanAnimation={playCaravanAnimation}
         isCaravanReverse={isCaravanReverse}
         isTreesAnimating={isTreesAnimating}
+        handleTabClick={handleTabClick}
+        isButtonClicked={isButtonClicked}
       />
       <ButtonsAndOverlay 
         zoom={zoom}

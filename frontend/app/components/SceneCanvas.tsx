@@ -1,6 +1,6 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment } from '@react-three/drei';
+import { OrbitControls, Environment, Plane } from '@react-three/drei';
 import { CameraController } from './CameraController';
 import { Text2D } from './Text2D';
 import NewsPlaneBackground from './NewsPlaneBackground';
@@ -14,6 +14,8 @@ interface SceneCanvasProps {
   playCaravanAnimation: boolean;
   isCaravanReverse: boolean;
   isTreesAnimating: boolean;
+  handleTabClick: (tab: string) => void;
+  isButtonClicked: boolean;
 }
 
 const SceneCanvas: React.FC<SceneCanvasProps> = ({
@@ -22,6 +24,8 @@ const SceneCanvas: React.FC<SceneCanvasProps> = ({
   playCaravanAnimation,
   isCaravanReverse,
   isTreesAnimating,
+  handleTabClick,
+  isButtonClicked,
 }) => {
   return (
     <Canvas shadows camera={{ position: [cameraPosition.x, cameraPosition.y, cameraPosition.z], fov: 50 }}>
@@ -39,10 +43,50 @@ const SceneCanvas: React.FC<SceneCanvasProps> = ({
         <Title2D/>
         <NewsPlaneBackground isTreesAnimating={isTreesAnimating}/>
         <AnimatedTrees isAnimating={isTreesAnimating} />
+
+        {isButtonClicked && (
+          <>
+            <Plane 
+              position={[-5.8, 1.5, 3.3]} 
+              args={[2, 3]} 
+              rotation={[0, 0.3, 0]}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleTabClick('Actualités');
+              }}
+            >
+              <meshStandardMaterial transparent opacity={0} />
+            </Plane>
+            
+            <Plane 
+              position={[-3.7, 1.5, 3]} 
+              args={[2, 3]} 
+              rotation={[0, 0, 0]}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleTabClick('L\'équipe');
+              }}
+            >
+              <meshStandardMaterial transparent opacity={0} />
+            </Plane>
+            
+            <Plane 
+              position={[-1.35, 1.5, 3]} 
+              args={[2, 3]} 
+              rotation={[0, -0.3, 0]}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleTabClick('Nos pizzas');
+              }}
+            >
+              <meshStandardMaterial transparent opacity={0} />
+            </Plane>
+          </>
+        )}
       </React.Suspense>
       <OrbitControls
         enableZoom={false}
-        enableRotate={true}
+        enableRotate={false}
         enablePan={false}
         target={[cameraLookAt.x, cameraLookAt.y, cameraLookAt.z]}
       />

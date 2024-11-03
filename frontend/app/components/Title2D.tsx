@@ -38,7 +38,7 @@ export const Title2D: React.FC = () => {
           font="/fonts/New Pizza.otf"
           letterSpacing={0.01}
         >
-          Po&apospote
+          Po&apos;pote
         </Text>
       </group>
     );
