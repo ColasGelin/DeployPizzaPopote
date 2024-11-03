@@ -6,10 +6,6 @@ export const useSceneController = () => {
 
   const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    setIsMobile(window.innerWidth <= 768);
-  }, []);
-
   interface Position {
     x: number;
     y: number;
@@ -33,12 +29,8 @@ export const useSceneController = () => {
   const mobilePizzasPosition: Position = { x: -1.35, y: 2.3, z: 4 };
 
   // State for all positions
-  const [initialPosition, setInitialPosition] = useState<Position>(
-    isMobile ? initialMobilePosition : initialDesktopPosition
-  );
-  const [discoverPosition, setDiscoverPosition] = useState<Position>(
-    isMobile ? mobileDiscoverPosition : desktopDiscoverPosition
-  );
+  const [initialPosition, setInitialPosition] = useState<Position>(initialDesktopPosition);
+  const [discoverPosition, setDiscoverPosition] = useState<Position>(desktopDiscoverPosition);
 
   // Other state variables
   const defaultLookAt: Position = { x: 0, y: 1, z: 0 };
@@ -53,12 +45,32 @@ export const useSceneController = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [isExiting, setIsExiting] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
-  const [cameraPosition, setCameraPosition] = useState<Position>(initialPosition);
+  const [cameraPosition, setCameraPosition] = useState<Position>(initialDesktopPosition);
   const [cameraLookAt, setCameraLookAt] = useState<Position>(defaultLookAt);
   const [TabClicked, setTabClicked] = useState(false);
   const [showScrollIndicator, setShowScrollIndicator] = useState(false);
   const [isTreesAnimating, setIsTreesAnimating] = useState(true);
   const cameraYRef = useRef(2.2);
+
+  // Set initial mobile/desktop state and update camera position
+  useEffect(() => {
+    const checkMobile = () => {
+      const newIsMobile = window.innerWidth <= 768;
+      setIsMobile(newIsMobile);
+      
+      // Update positions based on device type
+      setInitialPosition(newIsMobile ? initialMobilePosition : initialDesktopPosition);
+      setDiscoverPosition(newIsMobile ? mobileDiscoverPosition : desktopDiscoverPosition);
+      
+      // Update camera position
+      setCameraPosition(newIsMobile ? initialMobilePosition : initialDesktopPosition);
+    };
+
+    // Run on mount and window resize
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   interface ActualitesScrollRef {
     y: number;
@@ -99,6 +111,22 @@ export const useSceneController = () => {
   const actualitesScrollRef = useRef<ActualitesScrollRef>(
     isMobile ? mobileActualitesScroll : desktopActualitesScroll
   );
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() === 'e') {
+        console.log('Camera Position:', {
+          position: cameraPosition,
+          lookAt: cameraLookAt
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [cameraPosition, cameraLookAt]);
 
   useEffect(() => {
     const updateCameraPositionForCurrentState = (newIsMobile: boolean) => {
@@ -211,6 +239,8 @@ export const useSceneController = () => {
         cameraYRef.current = 2.2;
       }
     }
+    // Add keyboard event listener for camera position debugging
+   
 
     setActiveTab(tab);
     setTabClicked(true);
