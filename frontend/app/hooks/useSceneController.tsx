@@ -175,16 +175,35 @@ export const useSceneController = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, [zoom, isButtonClicked, TabClicked, activeTab]); // Added dependencies
 
+  const lastTouchY = useRef<number | null>(null);
+
   useEffect(() => {
-    const handleScroll = (event: WheelEvent) => {
+    const handleScroll = (event: WheelEvent | TouchEvent) => {
+      let deltaY = 0;
+      
+      if (event instanceof WheelEvent) {
+        deltaY = event.deltaY;
+      } else if (event instanceof TouchEvent) {
+        if (event.touches.length === 0 || !event.touches[0]) return;
+        
+        const touch = event.touches[0];
+        if (!lastTouchY.current) {
+          lastTouchY.current = touch.clientY;
+          return;
+        }
+        
+        deltaY = (lastTouchY.current - touch.clientY) * 10; // Adjust sensitivity
+        lastTouchY.current = touch.clientY;
+      }
+
       if (activeTab === 'Nos pizzas') {
-        const newY = Math.max(0.6, Math.min(2.3, cameraYRef.current - event.deltaY * 0.001));
+        const newY = Math.max(0.6, Math.min(2.3, cameraYRef.current - deltaY * 0.001));
         cameraYRef.current = newY;
         setCameraPosition(prev => ({ ...prev, y: newY }));
         setCameraLookAt(prev => ({ ...prev, y: newY }));
         setShowScrollIndicator(newY >= 1);
       } else if (activeTab === 'Actualités') {
-        const scrollAmount = event.deltaY * 0.001;
+        const scrollAmount = deltaY * 0.001;
         const ref = actualitesScrollRef.current;
         
         const newY = Math.max(ref.minY, Math.min(ref.maxY, ref.y - scrollAmount));
@@ -202,20 +221,37 @@ export const useSceneController = () => {
             x: -8.7 + (newX + 5.8) * 0.9,
             y: newY - 1.5,
             z: (newZ - 3.3) * 0.5
-            });
-          } else {
-            setCameraLookAt(prev => ({ ...prev, y: newY - 1.5 }));
-          }
+          });
+        } else {
+          setCameraLookAt(prev => ({ ...prev, y: newY - 1.5 }));
+        }
 
         setShowScrollIndicator(newY > ref.minY);
       }
     };
 
+    
+
+    const handleTouchStart = (event: TouchEvent) => {
+      lastTouchY.current = event.touches[0].clientY;
+    };
+
+    const handleTouchEnd = () => {
+      lastTouchY.current = null;
+    };
+
     window.addEventListener('wheel', handleScroll);
+    window.addEventListener('touchmove', handleScroll);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
+
     return () => {
       window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchmove', handleScroll);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [activeTab]);
+  }, [activeTab, isMobile]);
 
   const handleDiscoverClick = () => {
     setZoom(true);
