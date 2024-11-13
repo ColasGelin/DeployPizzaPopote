@@ -1,5 +1,5 @@
 'use client'
-
+//af9166e3ad10af6c870012824c05baa08aab04020b1837a2a08bd16014343bba80a08f5485b79394507fcbcbc715de9bf6653b4bb970dde623a673c00ca7588825b2b6f852c3f86b9547194da640e3b5537dbad9317dd280e964426e3ea0cf8c10342184cb813c32f3a2b33ebb9c529306f90c8fc966aa45b4a034dfc346cf1f
 import { useState, useEffect, useRef } from 'react';
 
 export const useSceneController = () => {
@@ -97,14 +97,14 @@ export const useSceneController = () => {
   };
 
   const mobileActualitesScroll: ActualitesScrollRef = {
-    x: -5.15,
+    x: -5,
     y: 2,
-    z: 3.8,
-    minX: -5.15,
+    z: 4,
+    minX: -5,
     maxY: 2,
-    minZ: 3.8,
-    maxX: -4.9,
-    minY: 0.65,
+    minZ: 4,
+    maxX: -4.8,
+    minY: 0.9,
     maxZ: 4.2
   };
 
@@ -113,11 +113,17 @@ export const useSceneController = () => {
   );
 
   useEffect(() => {
+    actualitesScrollRef.current = isMobile ? mobileActualitesScroll : desktopActualitesScroll;
+  }, [isMobile]);
+
+  useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
+      console.log('Key pressed:', event.key);
       if (event.key.toLowerCase() === 'e') {
         console.log('Camera Position:', {
           position: cameraPosition,
-          lookAt: cameraLookAt
+          lookAt: cameraLookAt,
+          isMobile: isMobile
         });
       }
     };
@@ -144,6 +150,7 @@ export const useSceneController = () => {
           case 'Actualités':
             const ref = actualitesScrollRef.current;
             actualitesScrollRef.current = newIsMobile ? mobileActualitesScroll : desktopActualitesScroll;
+            console.log('actualitesScrollRef', actualitesScrollRef.current);
             // Maintain scroll progress when switching
             const progress = (ref.maxY - ref.y) / (ref.maxY - ref.minY);
             const newRef = newIsMobile ? mobileActualitesScroll : desktopActualitesScroll;
@@ -179,6 +186,8 @@ export const useSceneController = () => {
 
   useEffect(() => {
     const handleScroll = (event: WheelEvent | TouchEvent) => {
+      console.log('isMobile:', isMobile);
+      console.log('actualitesScrollRef:', actualitesScrollRef.current);
       let deltaY = 0;
       
       if (event instanceof WheelEvent) {
