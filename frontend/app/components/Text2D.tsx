@@ -4,23 +4,26 @@ import { Text } from '@react-three/drei';
 import { colors } from '@/app/styles/styles';
 import { useFrame } from '@react-three/fiber';
 
-interface Pizza {
+interface MenuItem {
   id: number;
-  Nom: { type: string; children: { type: string; text: string }[] }[];
-  Description: { type: string; children: { type: string; text: string }[] }[];
-  Vegetarienne: boolean;
+  Name: string;
+  Description: string;
+  Vegetarian: boolean;
+  documentId: string;
 }
 
 interface Category {
   id: number;
-  CategoryName: string;
-  pizzas: Pizza[];
+  Name: string;
+  menu_items: MenuItem[];
+  documentId: string;
 }
 
-interface EntireMenu {
+interface Menu {
   id: number;
-  MenuTitle: string;
-  categories: Category[];
+  Name: string;
+  menu_categories: Category[];
+  documentId: string;
 }
 
 const VegetarianIcon: React.FC<{ position: [number, number, number]; opacity: number }> = ({ position, opacity }) => (
@@ -45,7 +48,7 @@ const VegetarianIcon: React.FC<{ position: [number, number, number]; opacity: nu
 export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
   isTreesAnimating,
 }) => {
-  const [entireMenu, setEntireMenu] = useState<EntireMenu | null>(null);
+  const [Menu, setMenu] = useState<Menu | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [opacity, setOpacity] = useState(0);
@@ -58,10 +61,11 @@ export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch('http://localhost:1337/api/entire-menus?populate[categories][populate]=pizzas');
+        const response = await fetch('http://localhost:1337/api/menus?populate[menu_categories][populate]=*');
         const data = await response.json();
         if (data.data && data.data.length > 0) {
-          setEntireMenu(data.data[0]);
+          setMenu(data.data[0]);
+          console.log(data.data[0]);
         } else {
           setError('No menu data found');
         }
@@ -117,7 +121,7 @@ export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
     );
   }
 
-  if (!entireMenu) {
+  if (!Menu) {
     return null;
   }
 
@@ -134,64 +138,72 @@ export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
         material-transparent
         material-opacity={opacity}
       >
-        {entireMenu.MenuTitle}
+        {Menu.Name}
       </Text>
       <group position={[-0.4, -0.15, 0]}>
-        {entireMenu.categories.map((category, categoryIndex) => (
-          <group key={category.id} position={[0, -categoryIndex * 0.5, 0]}>
-            <Text
-              color={colors.YELLOW}
-              fontSize={0.08}
-              maxWidth={1.8}
-              lineHeight={1}
-              letterSpacing={0.02}
-              textAlign="left"
-              font="/fonts/Crayone.otf"
-              anchorX="left"
-              position={[-0.06, 0, 0]}
-              material-transparent
-              material-opacity={opacity}
-            >
-              {category.CategoryName}
-            </Text>
-            {category.pizzas.map((pizza, pizzaIndex) => (
-              <group key={pizza.id} position={[0, -(pizzaIndex + 0.7) * 0.15, 0]}>
-                <group>
+        {Menu.menu_categories.map((category, categoryIndex) => {
+          const previousCategoriesHeight = Menu.menu_categories
+            .slice(0, categoryIndex)
+            .reduce((sum, cat) => {
+              return sum + (cat.menu_items.length * 0.15) + 0.15;
+            }, 0);
+          
+          return (
+            <group key={category.documentId} position={[0, -previousCategoriesHeight, 0]}>
+              <Text
+                color={colors.YELLOW}
+                fontSize={0.08}
+                maxWidth={1.8}
+                lineHeight={1}
+                letterSpacing={0.02}
+                textAlign="left"
+                font="/fonts/Crayone.otf"
+                anchorX="left"
+                position={[-0.06, 0, 0]}
+                material-transparent
+                material-opacity={opacity}
+              >
+                {category.Name}
+              </Text>
+              {category.menu_items.map((item, itemIndex) => (
+                <group key={item.documentId} position={[0, -(itemIndex + 0.7) * 0.15, 0]}>
+                  <group>
+                    <Text
+                      color={colors.RED}
+                      fontSize={0.06}
+                      maxWidth={1.8}
+                      lineHeight={1}
+                      letterSpacing={0.02}
+                      textAlign="left"
+                      font="/fonts/Crayone.otf"
+                      anchorX="left"
+                      material-transparent
+                      material-opacity={opacity}
+                    >
+                      {item.Name || 'Unnamed item'}
+                    </Text>
+                    {item.Vegetarian && <VegetarianIcon position={[iconOffset, 0.01, 0]} opacity={opacity} />}
+                  </group>
                   <Text
-                    color={colors.RED}
-                    fontSize={0.06}
-                    maxWidth={1.8}
-                    lineHeight={1}
-                    letterSpacing={0.02}
+                    position={[0, -0.05, 0]}
+                    color={colors.YELLOW}
+                    fontSize={0.03}
+                    maxWidth={2}
+                    lineHeight={1.2}
+                    letterSpacing={0.01}
                     textAlign="left"
                     font="/fonts/Crayone.otf"
                     anchorX="left"
                     material-transparent
                     material-opacity={opacity}
                   >
-                    {pizza.Nom[0]?.children[0]?.text || 'Unnamed Pizza'}
+                    {item.Description || 'No description available'}
                   </Text>
-                  {pizza.Vegetarienne && <VegetarianIcon position={[iconOffset, 0.01, 0]} opacity={opacity} />}
                 </group>
-                <Text
-                  position={[0, -0.05, 0]}
-                  color={colors.YELLOW}
-                  fontSize={0.03}
-                  maxWidth={2}
-                  lineHeight={1.2}
-                  letterSpacing={0.01}
-                  textAlign="left"
-                  font="/fonts/Crayone.otf"
-                  anchorX="left"
-                  material-transparent
-                  material-opacity={opacity}
-                >
-                  {pizza.Description[0]?.children[0]?.text || 'No description available'}
-                </Text>
-              </group>
-            ))}
-          </group>
-        ))}
+              ))}
+            </group>
+          );
+        })}
       </group>
     </group>
   );

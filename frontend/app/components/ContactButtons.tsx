@@ -85,7 +85,7 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({ isCompact }) => {
   useEffect(() => {
     const fetchContactInfo = async () => {
       try {
-        const response = await fetch('http://localhost:1337/api/contact-buttons');
+        const response = await fetch('http://localhost:1337/api/contact-infos');
         const data = await response.json();
         if (data.data && data.data.length > 0) {
           setContactInfo(data.data[0]);

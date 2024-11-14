@@ -9,9 +9,13 @@ interface TeamData {
   id: string;
   descriptionRight: string;
   descriptionLeft: string;
-  generalDescription: string;
-  imageLeft: string;
-  imageRight: string;
+  Description: string;
+  imageLeft: {
+    url: string;
+  };
+  imageRight: {
+    url: string;
+  };
 }
 
 const TeamContent = () => {
@@ -28,16 +32,15 @@ const TeamContent = () => {
       try {
         const response = await fetch('http://localhost:1337/api/team-contents?populate=*');
         const data = await response.json();
-        const attributes = data.data[0];
         
         if (data && data.data[0]) {
           setTeamData({
             id: data.data[0].id,
-            descriptionRight: attributes.descriptionRight,
-            descriptionLeft: attributes.descriptionLeft,
-            generalDescription: attributes.generalDescription,
-            imageLeft: attributes.imageLeft?.url || '/photoGG.png',
-            imageRight: attributes.imageRight?.url || '/photoGG.png',
+            descriptionRight: data.data[0].descriptionRight,
+            descriptionLeft: data.data[0].descriptionLeft,
+            Description: data.data[0].Description,
+            imageLeft: data.data[0].imageLeft,
+            imageRight: data.data[0].imageRight,
           });
         } else {
           setError('Error fetching team data');
@@ -69,7 +72,7 @@ const TeamContent = () => {
         {/* Left Member */}
         <div className={styles.memberCard}>
           <img
-            src={`http://localhost:1337${teamData.imageLeft}`}
+            src={`http://localhost:1337${teamData.imageLeft.url}`}
             className={styles.memberImage}
             alt="Team member left"
           />
@@ -81,7 +84,7 @@ const TeamContent = () => {
         {/* Right Member */}
         <div className={styles.memberCard}>
           <img
-            src={`http://localhost:1337${teamData.imageRight}`}
+            src={`http://localhost:1337${teamData.imageRight.url}`}
             className={styles.memberImage}
             alt="Team member right"
           />
@@ -95,7 +98,7 @@ const TeamContent = () => {
         className={styles.generalDescription} 
         style={{ backgroundColor: `${colors.BEIGE}CC` }}
       >
-        {teamData.generalDescription}
+        {teamData.Description}
       </p>
     </div>
   );

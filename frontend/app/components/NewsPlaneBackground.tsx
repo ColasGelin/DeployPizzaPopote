@@ -51,7 +51,7 @@ interface Post {
   Title: string;
   Description: string;
   DateAndPlace: string;
-  Image: Image;
+  Image: Image[];
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -78,19 +78,16 @@ const useNewsPlaneConfig = () => {
         const response = await fetch('http://localhost:1337/api/newss?populate[posts][populate]=*');
         const data: NewsResponse = await response.json();
         
-        // Get all unique posts from all news items
         const allPosts = data.data.reduce((acc: Post[], item) => {
           return [...acc, ...item.posts];
         }, []);
 
-        // Create new config only for existing posts
         const newConfig = allPosts.map((post, index) => {
-          // Get the reference layout from PlaneBackgroundConfig
           const referenceLayout = PlaneBackgroundConfig[index];
-          if (!referenceLayout) return null; // Skip if no reference layout exists
+          if (!referenceLayout) return null;
 
-          const imageUrl = post.Image?.url
-            ? `http://localhost:1337${post.Image.url}`
+          const imageUrl = post.Image?.[0]?.url
+            ? `http://localhost:1337${post.Image[0].url}`
             : "/photoGG.png";
 
           return {
@@ -117,7 +114,7 @@ const useNewsPlaneConfig = () => {
         setPlaneConfig(newConfig);
       } catch (error) {
         console.error('Error fetching news:', error);
-        setPlaneConfig([]);  // Empty array instead of fallback to PlaneBackgroundConfig
+        setPlaneConfig([]);
       }
     };
 
@@ -130,7 +127,6 @@ const useNewsPlaneConfig = () => {
 const NewsPlaneBackground: React.FC<NewsPlaneBackgroundProps> = ({ isTreesAnimating = false }) => {
   const planeConfig = useNewsPlaneConfig();
   
-  // Don't render anything if there's no data
   if (planeConfig.length === 0) return null;
 
   return (
