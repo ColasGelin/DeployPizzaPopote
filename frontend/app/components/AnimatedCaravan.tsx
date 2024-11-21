@@ -26,7 +26,7 @@ interface AnimatedCaravanProps {
 }
 
 export const AnimatedCaravan: React.FC<AnimatedCaravanProps> = ({
-  url = "/test.glb",
+  url = "/CaravanFlat.glb",
   scale = [0.5, 0.5, 0.5],
   position = [-3, -0.2, 0],
   rotation = [0, Math.PI / 2, 0],
@@ -106,4 +106,4 @@ export const AnimatedCaravan: React.FC<AnimatedCaravanProps> = ({
   );
 };
 
-useGLTF.preload("/test.glb");
+useGLTF.preload("/CaravanFlat.glb");
