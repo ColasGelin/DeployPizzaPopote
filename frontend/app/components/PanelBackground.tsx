@@ -5,7 +5,6 @@ import { useThree, useFrame } from '@react-three/fiber';
 import { Plane, Text } from '@react-three/drei';
 import { Mesh, Vector3, TextureLoader, PerspectiveCamera, FrontSide } from 'three';
 import * as THREE from 'three';
-import { useControls } from 'leva';
 
 interface TextItem {
   text: string;

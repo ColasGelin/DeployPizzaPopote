@@ -142,7 +142,7 @@ export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
         {Object.entries(menuData).map(([categoryName, category], categoryIndex) => {
           const previousCategoriesHeight = Object.entries(menuData)
             .slice(0, categoryIndex)
-            .reduce((sum, [_, cat]) => {
+            .reduce((sum, [, cat]) => {
               return sum + (cat.items.length * 0.15) + 0.15;
             }, 0);
           

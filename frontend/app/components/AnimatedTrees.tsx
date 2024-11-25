@@ -2,7 +2,7 @@
 import React, { useRef, useState } from 'react';
 import { useAnimations, useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { LoopRepeat, AnimationAction } from 'three';
+import { LoopRepeat } from 'three';
 
 interface ModelProps {
   url: string;
@@ -26,7 +26,7 @@ export function Model({
   const maxSpeed = 0.5;
   const decelerationRate = 0.991;
 
-  useFrame((state, delta) => {
+  useFrame(() => {
     Object.values(actions).forEach(animation => {
       if (animation) {
         if (isAnimating && currentSpeed !== maxSpeed) {

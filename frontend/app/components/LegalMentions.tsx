@@ -80,7 +80,7 @@ const LegalMentions: React.FC<LegalMentionsProps> = ({ isOpen, onClose }) => {
                     Ce site a été développé par [Votre nom/société]<br />
                     SIRET : [Votre SIRET]<br />
                     Email : [Votre email professionnel]<br />
-                    Le développeur n'est pas responsable de la mise à jour des contenus du site.
+                    Le développeur n&apos;poteest pas responsable de la mise à jour des contenus du site.
                   </p>
                 )
               },
@@ -98,9 +98,9 @@ const LegalMentions: React.FC<LegalMentionsProps> = ({ isOpen, onClose }) => {
               {
                 title: "3. Hébergement",
                 content: (
-                  <p>Ce site est hébergé par [Nom de l'hébergeur]<br />
-                     [Adresse de l'hébergeur]<br />
-                     [Contact de l'hébergeur]
+                  <p>Ce site est hébergé par [Nom de l&apos;potehébergeur]<br />
+                     [Adresse de l&apos;potehébergeur]<br />
+                     [Contact de l&apos;potehébergeur]
                   </p>
                 )
               },
@@ -109,7 +109,7 @@ const LegalMentions: React.FC<LegalMentionsProps> = ({ isOpen, onClose }) => {
                 content: (
                   <p>
                     Ce site est purement informatif et ne collecte aucune donnée personnelle des visiteurs. 
-                    Aucun cookie n'est utilisé pour le suivi des utilisateurs.
+                    Aucun cookie n&apos;poteest utilisé pour le suivi des utilisateurs.
                     Le site peut utiliser des cookies techniques essentiels au fonctionnement du site.
                   </p>
                 )
@@ -120,7 +120,7 @@ const LegalMentions: React.FC<LegalMentionsProps> = ({ isOpen, onClose }) => {
                   <p>
                     Le code source du site est la propriété du développeur. 
                     Les contenus (textes, images, logo) sont la propriété de Pizza Popote.
-                    Toute reproduction non autorisée des éléments du site constitue une violation des droits d'auteur.
+                    Toute reproduction non autorisée des éléments du site constitue une violation des droits d&apos;poteauteur.
                   </p>
                 )
               },
@@ -128,8 +128,8 @@ const LegalMentions: React.FC<LegalMentionsProps> = ({ isOpen, onClose }) => {
                 title: "6. Limitation de responsabilité",
                 content: (
                   <p>
-                    Le développeur s'efforce d'assurer au mieux de ses possibilités l'exactitude et la mise à jour des informations diffusées, dont il se réserve le droit de corriger le contenu à tout moment. 
-                    Le développeur n'est responsable que du code source et de l'architecture technique du site.
+                    Le développeur s&apos;efforce d&apos;poteassurer au mieux de ses possibilités l&apos;poteexactitude et la mise à jour des informations diffusées, dont il se réserve le droit de corriger le contenu à tout moment. 
+                    Le développeur n&apos;poteest responsable que du code source et de l&apos;potearchitecture technique du site.
                     Le contenu éditorial est sous la responsabilité de Pizza Popote.
                   </p>
                 )

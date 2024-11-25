@@ -56,9 +56,6 @@ const TeamContent = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-  };
-
   if (error) {
     return (
       <div 
@@ -87,7 +84,6 @@ const TeamContent = () => {
             className={styles.memberImage}
             alt={`Team member ${teamData.DescriptionLeft}`}
             loading="lazy"
-            onError={handleImageError}
           />
           <p className={styles.memberDescription}>
             {teamData.DescriptionLeft}
@@ -101,7 +97,6 @@ const TeamContent = () => {
             className={styles.memberImage}
             alt={`Team member ${teamData.DescriptionRight}`}
             loading="lazy"
-            onError={handleImageError}
           />
           <p className={styles.memberDescription}>
             {teamData.DescriptionRight}

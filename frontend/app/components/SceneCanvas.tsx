@@ -1,13 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment } from '@react-three/drei';
+import { Environment } from '@react-three/drei';
 import { CameraController } from './CameraController';
 import { Text2D } from './Text2D';
 import { Model } from './AnimatedTrees';
 import { AnimatedCaravan } from './AnimatedCaravan';
 import { Title2D } from './Title2D';
-import { TransformableControls } from './trans';
-import { TransformControls } from 'three/examples/jsm/Addons.js';
 import NewsPanel from './NewsPanel';
 
 interface SceneCanvasProps {
@@ -29,7 +27,6 @@ const SceneCanvas: React.FC<SceneCanvasProps> = ({
   isCaravanReverse,
   isTreesAnimating,
 }) => {
-  const orbitControlsRef = useRef(null);
   
   return (
     <Canvas shadows camera={{ position: [cameraPosition.x, cameraPosition.y, cameraPosition.z], fov: 50 }}>
