@@ -1,6 +1,7 @@
 'use client'
 //af9166e3ad10af6c870012824c05baa08aab04020b1837a2a08bd16014343bba80a08f5485b79394507fcbcbc715de9bf6653b4bb970dde623a673c00ca7588825b2b6f852c3f86b9547194da640e3b5537dbad9317dd280e964426e3ea0cf8c10342184cb813c32f3a2b33ebb9c529306f90c8fc966aa45b4a034dfc346cf1f
 import { useState, useEffect, useRef } from 'react';
+import { MathUtils } from 'three';
 
 export const useSceneController = () => {
 
@@ -13,11 +14,12 @@ export const useSceneController = () => {
   }
 
   // Define all positions
-  const initialDesktopPosition: Position = { x: 0, y: 2, z: 14 };
+  const initialDesktopPosition: Position = { x: 0, y: 8, z: 30 };
   const initialMobilePosition: Position = { x: 0, y: 2, z: 30 };
 
   const desktopDiscoverPosition: Position = { x: -3.5, y: 1, z: 7 };
   const mobileDiscoverPosition: Position = { x: -3.6, y: 1, z: 15 };
+  const DiscoverRotation: Position = { x: MathUtils.degToRad(3), y: 0, z: MathUtils.degToRad(4)};
 
   const desktopDefaultTabPosition: Position = { x: 0, y: 2, z: 5 };
   const mobileDefaultTabPosition: Position = { x: 0, y: 2, z: 6 };
@@ -31,9 +33,10 @@ export const useSceneController = () => {
   // State for all positions
   const [initialPosition, setInitialPosition] = useState<Position>(initialDesktopPosition);
   const [discoverPosition, setDiscoverPosition] = useState<Position>(desktopDiscoverPosition);
+  const [cameraRotation, setCameraRotation] = useState<Position>(DiscoverRotation);
 
   // Other state variables
-  const defaultLookAt: Position = { x: 0, y: 1, z: 0 };
+  const defaultLookAt: Position = { x: 0, y: 2, z: 0 };
   const discoverLookAt: Position = { x: -3.5, y: 2, z: 0 };
   const defaultTabLookAt: Position = { x: 0, y: 1, z: 0 };
   const equipeLookAt: Position = { x: -3.7, y: 2, z: 0 };
@@ -118,7 +121,6 @@ export const useSceneController = () => {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      console.log('Key pressed:', event.key);
       if (event.key.toLowerCase() === 'e') {
         console.log('Camera Position:', {
           position: cameraPosition,
@@ -186,8 +188,6 @@ export const useSceneController = () => {
 
   useEffect(() => {
     const handleScroll = (event: WheelEvent | TouchEvent) => {
-      console.log('isMobile:', isMobile);
-      console.log('actualitesScrollRef:', actualitesScrollRef.current);
       let deltaY = 0;
       
       if (event instanceof WheelEvent) {
@@ -268,6 +268,7 @@ export const useSceneController = () => {
     setIsCompact(true);
     setTabClicked(false);
     setCameraPosition(discoverPosition);
+    setCameraRotation(cameraRotation);
     setCameraLookAt(discoverLookAt);
   };
 
@@ -370,6 +371,7 @@ export const useSceneController = () => {
     isExiting,
     isCompact,
     cameraPosition,
+    cameraRotation,
     cameraLookAt,
     TabClicked,
     showScrollIndicator,

@@ -6,6 +6,7 @@ import { Vector3 } from 'three';
 
 interface CameraControllerProps {
   position: { x: number; y: number; z: number };
+  rotation?: { x: number; y: number; z: number };
   lookAt: { x: number; y: number; z: number };
 }
 

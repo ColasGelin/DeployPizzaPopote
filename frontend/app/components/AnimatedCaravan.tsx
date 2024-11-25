@@ -26,9 +26,9 @@ interface AnimatedCaravanProps {
 }
 
 export const AnimatedCaravan: React.FC<AnimatedCaravanProps> = ({
-  url = "/CaravanFlat.glb",
+  url = "/CaravanPlanet.glb",
   scale = [0.5, 0.5, 0.5],
-  position = [-3, -0.2, 0],
+  position = [-3, -0.15, 0],
   rotation = [0, Math.PI / 2, 0],
   playAnimation,
   isReverse,
@@ -58,8 +58,6 @@ export const AnimatedCaravan: React.FC<AnimatedCaravanProps> = ({
 
   useEffect(() => {
     if (currentActions.length > 0) {
-      console.log(playAnimation, isTreesAnimating);
-      console.log("action : ", currentActions);
       currentActions.forEach(action => {
         const actionName = action.getClip().name;
         if (["rearWheel", "carMovement", "frontWheel", "roueCaravan", "caravaan", "pancarteMenu", "CaravanWheels"].includes(actionName)) {
@@ -69,7 +67,7 @@ export const AnimatedCaravan: React.FC<AnimatedCaravanProps> = ({
             if (actionName === "carMovement")
               action.timeScale = 1.5;
             else
-              action.timeScale = 1;
+              action.timeScale = 0.8;
             action.paused = false;
             action.play();
           } else {
@@ -106,4 +104,4 @@ export const AnimatedCaravan: React.FC<AnimatedCaravanProps> = ({
   );
 };
 
-useGLTF.preload("/CaravanFlat.glb");
+useGLTF.preload("/CaravanPlanet.glb");

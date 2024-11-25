@@ -1,46 +1,47 @@
 'use client'
-
 import React, { useState, useEffect } from 'react';
 import { colors } from '@/app/styles/styles';
 import { police } from '@/app/styles/fonts';
 import styles from '../styles/TeamContent.module.css';
+import { fetchSheetData } from './ParseSheet';
 
-interface TeamData {
-  id: string;
-  descriptionRight: string;
-  descriptionLeft: string;
+interface TeamMember {
+  DescriptionLeft: string;
+  DescriptionRight: string;
+  ImageLeft: string;
+  ImageRight: string;
   Description: string;
-  imageLeft: {
-    url: string;
-  };
-  imageRight: {
-    url: string;
-  };
 }
 
 const TeamContent = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [teamData, setTeamData] = useState<TeamData | null>(null);
+  const [teamData, setTeamData] = useState<TeamMember | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Function to convert Google Drive sharing URL to embedded content URL
+  const getGoogleDriveEmbedUrl = (url: string) => {
+    const fileId = url.match(/\/d\/(.+?)\/view/)?.[1];
+    if (fileId) {
+      // Using the more reliable embedded content URL
+      return `https://lh3.googleusercontent.com/d/1D2fIm38Ne2DeTB9D5jBMGSI-UNKfFVdK=w1000`;
+    }
+    return url;
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 1000);
 
-    const fetchTeamData = async () => {
+    const fetchTeam = async () => {
       try {
-        const response = await fetch('http://localhost:1337/api/team-contents?populate=*');
-        const data = await response.json();
-        
-        if (data && data.data[0]) {
+        const sheetData = await fetchSheetData();
+        if (sheetData.team && sheetData.team[0]) {
+          const teamMember = sheetData.team[0];
           setTeamData({
-            id: data.data[0].id,
-            descriptionRight: data.data[0].descriptionRight,
-            descriptionLeft: data.data[0].descriptionLeft,
-            Description: data.data[0].Description,
-            imageLeft: data.data[0].imageLeft,
-            imageRight: data.data[0].imageRight,
+            ...teamMember,
+            ImageLeft: getGoogleDriveEmbedUrl(teamMember.ImageLeft),
+            ImageRight: getGoogleDriveEmbedUrl(teamMember.ImageRight)
           });
         } else {
           setError('Error fetching team data');
@@ -51,12 +52,22 @@ const TeamContent = () => {
       }
     };
 
-    fetchTeamData();
+    fetchTeam();
     return () => clearTimeout(timer);
   }, []);
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  };
+
   if (error) {
-    return <div className={styles.error} style={{ color: colors.RED, fontFamily: police.style.fontFamily }}>{error}</div>;
+    return (
+      <div 
+        className={styles.error} 
+        style={{ color: colors.RED, fontFamily: police.style.fontFamily }}
+      >
+        {error}
+      </div>
+    );
   }
 
   if (!teamData) {
@@ -64,7 +75,7 @@ const TeamContent = () => {
   }
 
   return (
-    <div 
+    <div
       className={`${styles.container} ${isVisible ? styles.fadeIn : styles.fadeOut}`}
       style={{ color: colors.GREEN, fontFamily: police.style.fontFamily }}
     >
@@ -72,30 +83,34 @@ const TeamContent = () => {
         {/* Left Member */}
         <div className={styles.memberCard}>
           <img
-            src={`http://localhost:1337${teamData.imageLeft.url}`}
+            src={teamData.ImageLeft}
             className={styles.memberImage}
-            alt="Team member left"
+            alt={`Team member ${teamData.DescriptionLeft}`}
+            loading="lazy"
+            onError={handleImageError}
           />
           <p className={styles.memberDescription}>
-            {teamData.descriptionLeft}
+            {teamData.DescriptionLeft}
           </p>
         </div>
 
         {/* Right Member */}
         <div className={styles.memberCard}>
           <img
-            src={`http://localhost:1337${teamData.imageRight.url}`}
+            src={teamData.ImageRight}
             className={styles.memberImage}
-            alt="Team member right"
+            alt={`Team member ${teamData.DescriptionRight}`}
+            loading="lazy"
+            onError={handleImageError}
           />
           <p className={styles.memberDescription}>
-            {teamData.descriptionRight}
+            {teamData.DescriptionRight}
           </p>
         </div>
       </div>
 
-      <p 
-        className={styles.generalDescription} 
+      <p
+        className={styles.generalDescription}
         style={{ backgroundColor: `${colors.BEIGE}CC` }}
       >
         {teamData.Description}

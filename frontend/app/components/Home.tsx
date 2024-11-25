@@ -1,9 +1,9 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useSceneController } from '../hooks/useSceneController';
 import SceneCanvas from './SceneCanvas';
 import ButtonsAndOverlay from './ButtonsAndOverlay';
+import { fetchSheetData, type SheetData } from './ParseSheet';
 
 export default function Home() {
   const {
@@ -14,6 +14,7 @@ export default function Home() {
     isExiting,
     isCompact,
     cameraPosition,
+    cameraRotation,
     cameraLookAt,
     showScrollIndicator,
     handleDiscoverClick,
@@ -27,6 +28,23 @@ export default function Home() {
 
   const [playCaravanAnimation, setPlayCaravanAnimation] = useState(false);
   const [isCaravanReverse, setIsCaravanReverse] = useState(false);
+  const [sheetData, setSheetData] = useState<SheetData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch sheet data on component mount
+  useEffect(() => {
+    const loadSheetData = async () => {
+      try {
+        const data = await fetchSheetData();
+        setSheetData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch sheet data');
+        console.error('Error loading sheet data:', err);
+      }
+    };
+
+    loadSheetData();
+  }, []);
 
   const handleDiscoverClickWithAnimation = () => {
     setIsTreesAnimating(false);
@@ -45,8 +63,9 @@ export default function Home() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-      <SceneCanvas 
+      <SceneCanvas
         cameraPosition={cameraPosition}
+        cameraRotation={cameraRotation}
         cameraLookAt={cameraLookAt}
         playCaravanAnimation={playCaravanAnimation}
         isCaravanReverse={isCaravanReverse}
@@ -54,7 +73,7 @@ export default function Home() {
         handleTabClick={handleTabClick}
         isButtonClicked={isButtonClicked}
       />
-      <ButtonsAndOverlay 
+      <ButtonsAndOverlay
         zoom={zoom}
         isExiting={isExiting}
         activeTab={activeTab}
