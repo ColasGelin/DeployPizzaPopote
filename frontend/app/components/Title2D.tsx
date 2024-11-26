@@ -47,8 +47,8 @@ export const Title2D: React.FC = () => {
   // Desktop version
   return (
     <Text
-      position={[0, 9, -20]}
-      scale={[6, 6, 6]}
+      position={[0, 10, -20]}
+      scale={[8, 8, 8]}
       color={colors.TITLE}
       anchorX="center"
       anchorY="middle"

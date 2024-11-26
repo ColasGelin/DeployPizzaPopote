@@ -56,7 +56,7 @@ const PanelBackground: React.FC<PanelBackgroundProps> = ({
     if (isActive && !isInvisible) {
       const timer = setTimeout(() => {
         setIsVisible(true);
-      }, 800);
+      }, 1200);
       return () => clearTimeout(timer);
     } else {
       setIsVisible(false);

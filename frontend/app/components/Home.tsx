@@ -13,7 +13,7 @@ export default function Home() {
     isExiting,
     isCompact,
     cameraPosition,
-    cameraRotation,
+    cameraTilt,
     cameraLookAt,
     showScrollIndicator,
     handleDiscoverClick,
@@ -47,7 +47,7 @@ export default function Home() {
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <SceneCanvas
         cameraPosition={cameraPosition}
-        cameraRotation={cameraRotation}
+        cameraTilt={cameraTilt}
         cameraLookAt={cameraLookAt}
         playCaravanAnimation={playCaravanAnimation}
         isCaravanReverse={isCaravanReverse}

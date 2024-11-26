@@ -45,7 +45,7 @@ export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
   const [scale, setScale] = useState(0.95);
 
   const targetOpacity = isVisible ? 1 : 0;
-  const targetScale = isVisible ? 1 : 0.95;
+  const targetScale = isVisible ? 0.9 : 0.8;
   const animationSpeed = 0.1;
 
   useEffect(() => {
@@ -124,7 +124,7 @@ export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
   }
 
   return (
-    <group position={[-1.47, 2.6, 1.74]} visible={opacity > 0} scale={[scale, scale, scale]} rotation={[0, 0.003, -6.22]}>
+    <group position={[-1.49, 2.65, 1.74]} visible={opacity > 0} scale={[scale, scale, scale]} rotation={[0, 0.003, -6.22]}>
       <Text 
         color={colors.GREEN} 
         fontSize={0.12} 
@@ -136,7 +136,7 @@ export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
         material-transparent
         material-opacity={opacity}
       >
-        Pizza Popote
+        Nos pizzas
       </Text>
       <group position={[-0.4, -0.15, 0]}>
         {Object.entries(menuData).map(([categoryName, category], categoryIndex) => {

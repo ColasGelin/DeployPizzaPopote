@@ -10,7 +10,7 @@ import NewsPanel from './NewsPanel';
 
 interface SceneCanvasProps {
   cameraPosition: { x: number; y: number; z: number };
-  cameraRotation: { x: number; y: number; z: number };
+  cameraTilt: number;
   cameraLookAt: { x: number; y: number; z: number };
   playCaravanAnimation: boolean;
   isCaravanReverse: boolean;
@@ -21,7 +21,7 @@ interface SceneCanvasProps {
 
 const SceneCanvas: React.FC<SceneCanvasProps> = ({
   cameraPosition,
-  cameraRotation,
+  cameraTilt,
   cameraLookAt,
   playCaravanAnimation,
   isCaravanReverse,
@@ -48,7 +48,7 @@ const SceneCanvas: React.FC<SceneCanvasProps> = ({
       <CameraController
         position={cameraPosition}
         lookAt={cameraLookAt}
-        rotation={cameraRotation}
+        tilt={cameraTilt}
       />
       <NewsPanel isTreesAnimating={isTreesAnimating}/>
       {/* <OrbitControls ref={orbitControlsRef} /> */}

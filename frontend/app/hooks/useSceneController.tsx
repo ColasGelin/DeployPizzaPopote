@@ -17,30 +17,30 @@ export const useSceneController = () => {
   const initialDesktopPosition: Position = { x: 0, y: 8, z: 30 };
   const initialMobilePosition: Position = { x: 0, y: 2, z: 30 };
 
-  const desktopDiscoverPosition: Position = { x: -3.5, y: 1, z: 7 };
+  const desktopDiscoverPosition: Position = { x: -3.8, y: 1, z: 7 };
   const mobileDiscoverPosition: Position = { x: -3.6, y: 1, z: 15 };
-  const DiscoverRotation: Position = { x: MathUtils.degToRad(3), y: 0, z: MathUtils.degToRad(4)};
+  const DiscoverTilt: number = MathUtils.degToRad(4.5);
 
   const desktopDefaultTabPosition: Position = { x: 0, y: 2, z: 5 };
   const mobileDefaultTabPosition: Position = { x: 0, y: 2, z: 6 };
 
-  const desktopEquipePosition: Position = { x: -3.7, y: 2, z: 3.5 };
-  const mobileEquipePosition: Position = { x: -3.7, y: 2, z: 6.5 };
+  const desktopEquipePosition: Position = { x: -3.85, y: 2, z: 3.5 };
+  const mobileEquipePosition: Position = { x: -3.85, y: 2, z: 6.5 };
 
-  const desktopPizzasPosition: Position = { x: -1.35, y: 2.3, z: 3 };
-  const mobilePizzasPosition: Position = { x: -1.35, y: 2.3, z: 4 };
+  const desktopPizzasPosition: Position = { x: -1.5, y: 2.3, z: 3 };
+  const mobilePizzasPosition: Position = { x: -1.5, y: 2.3, z: 4 };
 
   // State for all positions
   const [initialPosition, setInitialPosition] = useState<Position>(initialDesktopPosition);
   const [discoverPosition, setDiscoverPosition] = useState<Position>(desktopDiscoverPosition);
-  const [cameraRotation, setCameraRotation] = useState<Position>(DiscoverRotation);
+  const [cameraTilt, setCameraTilt] = useState<number>(0);
 
   // Other state variables
   const defaultLookAt: Position = { x: 0, y: 2, z: 0 };
-  const discoverLookAt: Position = { x: -3.5, y: 2, z: 0 };
+  const discoverLookAt: Position = { x: -3.8, y: 2, z: 0 };
   const defaultTabLookAt: Position = { x: 0, y: 1, z: 0 };
-  const equipeLookAt: Position = { x: -3.7, y: 2, z: 0 };
-  const pizzasLookAt: Position = { x: -1.35, y: 2.3, z: 0 };
+  const equipeLookAt: Position = { x: -3.85, y: 2, z: 0 };
+  const pizzasLookAt: Position = { x: -1.5, y: 2.3, z: 0 };
 
   const [zoom, setZoom] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
@@ -94,9 +94,9 @@ export const useSceneController = () => {
     minX: -5.9,
     maxY: 2.2,
     minZ: 3.1,
-    maxX: -5.55,
-    minY: 0.65,
-    maxZ: 3.5
+    maxX: -5,
+    minY: 0,
+    maxZ: 3.8
   };
 
   const mobileActualitesScroll: ActualitesScrollRef = {
@@ -152,7 +152,6 @@ export const useSceneController = () => {
           case 'Actualités':
             const ref = actualitesScrollRef.current;
             actualitesScrollRef.current = newIsMobile ? mobileActualitesScroll : desktopActualitesScroll;
-            console.log('actualitesScrollRef', actualitesScrollRef.current);
             // Maintain scroll progress when switching
             const progress = (ref.maxY - ref.y) / (ref.maxY - ref.minY);
             const newRef = newIsMobile ? mobileActualitesScroll : desktopActualitesScroll;
@@ -231,6 +230,7 @@ export const useSceneController = () => {
             y: newY - 1.5,
             z: (newZ - 3.3) * 0.5
           });
+          setCameraTilt(0.4);
         } else {
           setCameraLookAt(prev => ({ ...prev, y: newY - 1.5 }));
         }
@@ -268,9 +268,9 @@ export const useSceneController = () => {
     setIsCompact(true);
     setTabClicked(false);
     setCameraPosition(discoverPosition);
-    setCameraRotation(cameraRotation);
+    setCameraTilt(DiscoverTilt);  // Now it sets to actual tilt value when clicked
     setCameraLookAt(discoverLookAt);
-  };
+};
 
   const handleTabClick = (tab: string) => {
     // Reset scroll position if we're switching tabs
@@ -285,8 +285,6 @@ export const useSceneController = () => {
         cameraYRef.current = 2.2;
       }
     }
-    // Add keyboard event listener for camera position debugging
-   
 
     setActiveTab(tab);
     setTabClicked(true);
@@ -302,13 +300,16 @@ export const useSceneController = () => {
           z: currentIsMobile ? 0.1 : 0.05 
         });
         setShowScrollIndicator(true);
+        setCameraTilt(0.4)
         break;
       case 'L\'équipe':
         setCameraPosition(currentIsMobile ? mobileEquipePosition : desktopEquipePosition);
         setCameraLookAt(equipeLookAt);
         setShowScrollIndicator(false);
+        setCameraTilt(0.07);
         break;
       case 'Nos pizzas':
+        setCameraTilt(0.07)
         setCameraPosition(currentIsMobile ? mobilePizzasPosition : desktopPizzasPosition);
         setCameraLookAt(pizzasLookAt);
         setShowScrollIndicator(true);
@@ -328,13 +329,13 @@ export const useSceneController = () => {
     ref.x = ref.minX;
     ref.z = ref.minZ;
     cameraYRef.current = 2.2;
-
     if (TabClicked) {
       setActiveTab(null);
       setCameraPosition(discoverPosition);
       setCameraLookAt(discoverLookAt);
       setTabClicked(false);
       setShowScrollIndicator(false);
+      setCameraTilt(DiscoverTilt);
     } else {
       setIsExiting(true);
       setZoom(false);
@@ -347,6 +348,7 @@ export const useSceneController = () => {
       setTimeout(() => {
         setIsExiting(false);
       }, 500);
+     setCameraTilt(0);
     }
   };
 
@@ -371,7 +373,7 @@ export const useSceneController = () => {
     isExiting,
     isCompact,
     cameraPosition,
-    cameraRotation,
+    cameraTilt,
     cameraLookAt,
     TabClicked,
     showScrollIndicator,

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'PizzaPopote',
-  description: 'React Three Fiber demo in Next.js',
+  description: 'La plus sympa des pizzas',
 }
 
 export default function RootLayout({
