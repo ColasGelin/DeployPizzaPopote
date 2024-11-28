@@ -10,7 +10,7 @@ interface NewsPanelProps {
 
 const useNewsPlaneConfig = () => {
   const [planeConfig, setPlaneConfig] = useState<typeof PanelBackgroundConfig>([]);
-  const API_URL = 'http://64.226.114.142:3001';
+  const API_URL = 'https://64.226.114.142:3001';
   const API_ENDPOINT = `${API_URL}/api`;
 
   useEffect(() => {
