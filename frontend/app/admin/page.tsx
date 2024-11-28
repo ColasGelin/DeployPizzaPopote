@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { MenuComponent } from './Tabs/Menu';
+import { MenuComponent } from './Tabs/menu';
 import { Category, MenuItem, NewsItem } from './types';
 import { NewsComponent } from './Tabs/News';
 import { ContactComponent } from './Tabs/Contact';
