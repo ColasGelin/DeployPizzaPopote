@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { Plus, Trash2, AlertCircle, Image } from 'lucide-react';
 import { NewsItem } from './types';
 
+type NewsItemInput = Omit<NewsItem, 'id'>;
+
 interface NewsComponentProps {
   news: NewsItem[];
   onDeleteNews: (id: number) => void;
-  onAddNews: (newsData: any) => void;
+  onAddNews: (newsData: NewsItemInput) => void;
 }
 
 export function NewsComponent({
@@ -76,7 +78,6 @@ export function NewsComponent({
   };
 
   const DeleteConfirmDialog = ({ 
-    id,
     title, 
     onConfirm, 
     onCancel 

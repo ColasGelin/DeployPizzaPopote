@@ -80,7 +80,7 @@ const PanelBackground: React.FC<PanelBackgroundProps> = ({
     const textureLoader = new TextureLoader();
     Promise.all(
       items.map((item, index) =>
-        new Promise<THREE.Texture>((resolve, reject) => {
+        new Promise<THREE.Texture>((resolve) => {
           if (!item.imageUrl) {
             console.log(`No image URL for item ${index}`);
             resolve(new THREE.Texture()); // Return empty texture
