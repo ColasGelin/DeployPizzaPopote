@@ -33,7 +33,7 @@ export function ContactComponent() {
     e.preventDefault();
     try {
       await fetch('https://64.226.114.142:3443/api/contact', {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(contactInfo)
       });
