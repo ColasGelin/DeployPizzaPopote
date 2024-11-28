@@ -23,7 +23,7 @@ const TeamContent = () => {
     const fileId = url.match(/\/d\/(.+?)\/view/)?.[1];
     if (fileId) {
       // Using the more reliable embedded content URL
-      return `https://lh3.googleusercontent.com/d/1D2fIm38Ne2DeTB9D5jBMGSI-UNKfFVdK=w1000`;
+      return `https://lh3.googleusercontent.com/d/11QN0LsmGVGZKzD6rW1tjAexQIVtoPXwc=w1000`;
     }
     return url;
   };

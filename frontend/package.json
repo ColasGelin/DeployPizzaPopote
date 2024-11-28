@@ -4,21 +4,29 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3002",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.1.2",
+    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-slot": "^1.1.0",
     "@react-spring/three": "^9.7.4",
     "@react-three/drei": "^9.113.0",
     "@react-three/fiber": "^8.17.7",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "framer-motion": "^11.11.17",
     "leva": "^0.9.35",
     "lucide-react": "^0.446.0",
     "next": "14.2.12",
     "react": "^18",
     "react-dom": "^18",
+    "shadcn-ui": "^0.2.3",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss-animate": "^1.0.7",
     "three": "^0.168.0"
   },
   "devDependencies": {

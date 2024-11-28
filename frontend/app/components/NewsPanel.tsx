@@ -2,34 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { PanelBackgroundConfig } from './PanelBackgroundConfig';
 import PanelBackground from '@/app/components/PanelBackground';
-import { fetchSheetData } from './ParseSheet';
-
-interface SheetData {
-  contactInfos: {
-    Instagram: string;
-    Email: string;
-    Phone: string;
-  };
-  menu: Array<{
-    "Menu Category": string;
-    "Item Name": string;
-    IsVegetarian: boolean;
-    Description: string;
-  }>;
-  news: Array<{
-    Title: string;
-    Description: string;
-    DateAndPlace: string;
-    Image: string;
-  }>;
-  team: Array<{
-    DescriptionLeft: string;
-    DescriptionRight: string;
-    ImageLeft: string;
-    ImageRight: string;
-    Description: string;
-  }>;
-}
+import { NewsItem } from '@/app/admin/types';
 
 interface NewsPanelProps {
   isTreesAnimating?: boolean;
@@ -37,54 +10,47 @@ interface NewsPanelProps {
 
 const useNewsPlaneConfig = () => {
   const [planeConfig, setPlaneConfig] = useState<typeof PanelBackgroundConfig>([]);
+  const API_URL = 'http://64.226.114.142:3001';
+  const API_ENDPOINT = `${API_URL}/api`;
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const data: SheetData = await fetchSheetData();
-        
-        // Map through the PanelBackgroundConfig and merge with news data
+        const response = await fetch(`${API_ENDPOINT}/news`);
+        const newsData: NewsItem[] = await response.json();
         const newConfig = PanelBackgroundConfig.map((layout, index) => {
-          const newsItem = data.news[index];
-          if (!newsItem) return layout; // Keep original layout if no news item
-
-          // Convert Google Drive URL to direct URL if needed
-          let imageUrl = newsItem.Image || layout.imageUrl;
-          if (imageUrl.includes('drive.google.com')) {
-            // Extract file ID and create direct link
-            const fileId = imageUrl.match(/\/d\/(.+?)\/view/)?.[1];
-            if (fileId) {
-              imageUrl = `/api/placeholder/480/320`; // Fallback to placeholder for now
-              // In production, you might want to use:
-              // imageUrl = `https://drive.google.com/uc?id=${fileId}`;
-            }
-          }
+          const newsItem = newsData[index];
+          if (!newsItem) return layout;
+          
+          // Fix the image URL construction
+          const imageUrl = newsItem.image 
+            ? `${API_URL}${newsItem.image}` // Remove /api from the image URL
+            : layout.imageUrl;
 
           return {
             ...layout,
             imageUrl,
             text: {
               ...layout.text,
-              text: newsItem.Description || layout.text.text
+              text: newsItem.description || layout.text.text
             },
             title: {
               ...layout.title,
-              text: newsItem.Title || layout.title.text
+              text: newsItem.title || layout.title.text
             },
             dateAndPlace: {
               ...layout.dateAndPlace,
-              text: newsItem.DateAndPlace || layout.dateAndPlace.text
+              text: newsItem.dateAndPlace || layout.dateAndPlace.text
             }
           };
         });
-
+        console.log("newConfig", newConfig);
         setPlaneConfig(newConfig);
       } catch (error) {
         console.error('Error fetching news:', error);
-        setPlaneConfig(PanelBackgroundConfig); // Fallback to default config
+        setPlaneConfig(PanelBackgroundConfig);
       }
     };
-
     fetchNews();
   }, []);
 
@@ -93,7 +59,7 @@ const useNewsPlaneConfig = () => {
 
 const NewsPanel: React.FC<NewsPanelProps> = ({ isTreesAnimating = false }) => {
   const planeConfig = useNewsPlaneConfig();
-
+  
   if (planeConfig.length === 0) return null;
 
   return (

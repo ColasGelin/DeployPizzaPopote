@@ -95,7 +95,7 @@ export const useSceneController = () => {
     maxY: 2.2,
     minZ: 3.1,
     maxX: -5,
-    minY: 0,
+    minY: 0.5,
     maxZ: 3.8
   };
 

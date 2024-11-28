@@ -79,15 +79,37 @@ const PanelBackground: React.FC<PanelBackgroundProps> = ({
   useEffect(() => {
     const textureLoader = new TextureLoader();
     Promise.all(
-      items.map(item =>
-        new Promise<THREE.Texture>((resolve) => {
-          textureLoader.load(item.imageUrl, (loadedTexture) => {
-            loadedTexture.needsUpdate = true;
-            resolve(loadedTexture);
-          });
+      items.map((item, index) =>
+        new Promise<THREE.Texture>((resolve, reject) => {
+          if (!item.imageUrl) {
+            console.log(`No image URL for item ${index}`);
+            resolve(new THREE.Texture()); // Return empty texture
+            return;
+          }
+          
+          console.log(`Loading texture for index ${index}:`, item.imageUrl);
+          
+          textureLoader.load(
+            item.imageUrl,
+            (loadedTexture) => {
+              console.log(`Successfully loaded texture ${index}`);
+              loadedTexture.needsUpdate = true;
+              resolve(loadedTexture);
+            },
+            // Progress callback
+            (progress) => {
+              console.log(`Loading progress for texture ${index}:`, progress);
+            },
+            // Error callback
+            (error) => {
+              console.error(`Error loading texture ${index}:`, error);
+              resolve(new THREE.Texture()); // Return empty texture on error
+            }
+          );
         })
       )
     ).then(textures => {
+      console.log('All textures loaded:', textures);
       setLoadedTextures(textures);
     });
   }, [items]);
@@ -137,27 +159,30 @@ const PanelBackground: React.FC<PanelBackgroundProps> = ({
 
       {/* Render items */}
       {items.map((item, index) => {
-        console.log("rendering", item);
-        const itemPosition = convert2DTo3D(item.position, index);
-        const scale = item.scale || [0.2, 0.2];
-        
-        return (
-          <group key={index} frustumCulled={false}>
-            <group position={new Vector3(...itemPosition)}>
-              <Plane 
-                args={scale}
-                position={[0, 0, 0.001]}
-                frustumCulled={false}
-              >
-                <meshBasicMaterial
-                  map={loadedTextures[index]}
-                  transparent={true}
-                  opacity={opacity}
-                  side={FrontSide}
-                  toneMapped={false}
-                />
-              </Plane>
-            </group>
+  // Skip rendering the image plane if imageUrl is empty
+  const shouldRenderImage = item.imageUrl && item.imageUrl !== '';
+  const itemPosition = convert2DTo3D(item.position, index);
+  const scale = item.scale || [0.2, 0.2];
+  
+  return (
+    <group key={index} frustumCulled={false}>
+      {shouldRenderImage && (
+        <group position={new Vector3(...itemPosition)}>
+          <Plane 
+            args={scale}
+            position={[0, 0, 0.001]}
+            frustumCulled={false}
+          >
+            <meshBasicMaterial
+              map={loadedTextures[index]}
+              transparent={true}
+              opacity={opacity}
+              side={FrontSide}
+              toneMapped={false}
+            />
+          </Plane>
+        </group>
+      )}
 
             {/* Render associated text elements with opacity */}
             {item.text && (
