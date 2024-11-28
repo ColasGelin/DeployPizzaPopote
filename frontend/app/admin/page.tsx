@@ -5,7 +5,7 @@ import { MenuComponent } from './Tabs/menu';
 import { Category, MenuItem, NewsItem } from './types';
 import { NewsComponent } from './News';
 
-const API_URL = 'https://64.226.114.142:3001/api';
+const API_URL = 'https://64.226.114.142:3443/api';
 
 export default function MenuPage() {
   const [categories, setCategories] = useState<Category[]>([]);

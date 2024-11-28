@@ -19,7 +19,7 @@ interface Category {
   items: MenuItem[];
 }
 
-const API_URL = 'http:s//64.226.114.142:3001/api';
+const API_URL = 'https://64.226.114.142:3443/api';
 
 const VegetarianIcon: React.FC<{ position: [number, number, number]; opacity: number }> = ({ position, opacity }) => (
   <group position={position}>

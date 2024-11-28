@@ -133,7 +133,7 @@ export function NewsComponent({
                 {item.image && (
                   <div className="mt-2">
                     <img 
-                      src={`https://64.226.114.142:3001/uploads/${item.image.split('/').pop()}`} 
+                      src={`https://64.226.114.142:3443/uploads/${item.image.split('/').pop()}`} 
                       alt={item.title}
                       className="max-w-xs rounded-lg shadow"
                     />
