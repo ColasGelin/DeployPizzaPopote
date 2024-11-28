@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Plus, Trash2, AlertCircle, Image } from 'lucide-react';
-import { NewsItem } from './types';
+import { NewsItem } from '../types';
 
 type NewsItemInput = Omit<NewsItem, 'id'>;
 

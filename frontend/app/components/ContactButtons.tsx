@@ -16,9 +16,9 @@ interface IconButtonProps {
 }
 
 interface ContactInfo {
-  Phone: string;
-  Email: string;
-  Instagram: string;
+  phone: string;
+  email: string;
+  instagram: string;
 }
 
 const IconButton: React.FC<IconButtonProps> = ({ href, ariaLabel, children, shape, text, isCompact }) => {
@@ -88,9 +88,7 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({ isCompact }) => {
         const response = await fetch('https://64.226.114.142:3443/api/contact');
         const data = await response.json();
         console.log("data", data);
-        if (data.length > 0) {
-          setContactInfo(data.data[0]);
-        }
+        setContactInfo(data);
       } catch (error) {
         console.error('Error fetching contact information:', error);
       }
@@ -111,10 +109,10 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({ isCompact }) => {
       transition: 'all 0.5s ease',
     }}>
       <IconButton
-        href={`tel:${contactInfo.Phone}`}
-        ariaLabel={contactInfo.Phone}
+        href={`tel:${contactInfo.phone}`}
+        ariaLabel={contactInfo.phone}
         shape="60% 40% 70% 30% / 50% 60% 40% 50%"
-        text={contactInfo.Phone}
+        text={contactInfo.phone}
         isCompact={isCompact}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -122,10 +120,10 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({ isCompact }) => {
         </svg>
       </IconButton>
       <IconButton
-        href={`mailto:${contactInfo.Email}`}
-        ariaLabel={contactInfo.Email}
+        href={`mailto:${contactInfo.email}`}
+        ariaLabel={contactInfo.email}
         shape="55% 45% 67% 30% / 45% 40% 60% 55%"
-        text={contactInfo.Email}
+        text={contactInfo.email}
         isCompact={isCompact}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -134,10 +132,10 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({ isCompact }) => {
         </svg>
       </IconButton>
       <IconButton
-        href={`https://www.instagram.com/${contactInfo.Instagram.replace('@', '')}`}
-        ariaLabel={contactInfo.Instagram}
+        href={`https://www.instagram.com/${contactInfo.instagram.replace('@', '')}`}
+        ariaLabel={contactInfo.instagram}
         shape="70% 30% 30% 70% / 60% 40% 60% 40%"
-        text={contactInfo.Instagram}
+        text={contactInfo.instagram}
         isCompact={isCompact}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

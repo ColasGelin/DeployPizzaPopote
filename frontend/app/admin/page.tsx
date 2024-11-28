@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { MenuComponent } from './Tabs/menu';
+import { MenuComponent } from './Tabs/Menu';
 import { Category, MenuItem, NewsItem } from './types';
-import { NewsComponent } from './News';
+import { NewsComponent } from './Tabs/News';
+import { ContactComponent } from './Tabs/Contact';
 
 const API_URL = 'https://64.226.114.142:3443/api';
 
@@ -201,6 +202,7 @@ export default function MenuPage() {
         onDeleteNews={handleDeleteNews}
         onAddNews={handleAddNews}
       />
+    <ContactComponent />
     </div>
   );
 }
