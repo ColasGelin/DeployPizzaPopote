@@ -3,30 +3,23 @@ import React, { useState, useEffect } from 'react';
 import { colors } from '@/app/styles/styles';
 import { police } from '@/app/styles/fonts';
 import styles from '../styles/TeamContent.module.css';
-import { fetchSheetData } from './ParseSheet';
+import Image from 'next/image';
 
 interface TeamMember {
-  DescriptionLeft: string;
-  DescriptionRight: string;
-  ImageLeft: string;
-  ImageRight: string;
-  Description: string;
+  descriptionLeft: string;
+  descriptionRight: string;
+  imageLeft: string;
+  imageRight: string;
+  description: string;
 }
+
+const API_URL = 'https://64.226.114.142:3443';
+const API_ENDPOINT = `${API_URL}/api`;
 
 const TeamContent = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [teamData, setTeamData] = useState<TeamMember | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  // Function to convert Google Drive sharing URL to embedded content URL
-  const getGoogleDriveEmbedUrl = (url: string) => {
-    const fileId = url.match(/\/d\/(.+?)\/view/)?.[1];
-    if (fileId) {
-      // Using the more reliable embedded content URL
-      return `https://lh3.googleusercontent.com/d/11QN0LsmGVGZKzD6rW1tjAexQIVtoPXwc=w1000`;
-    }
-    return url;
-  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -35,14 +28,17 @@ const TeamContent = () => {
 
     const fetchTeam = async () => {
       try {
-        const sheetData = await fetchSheetData();
-        if (sheetData.team && sheetData.team[0]) {
-          const teamMember = sheetData.team[0];
-          setTeamData({
-            ...teamMember,
-            ImageLeft: getGoogleDriveEmbedUrl(teamMember.ImageLeft),
-            ImageRight: getGoogleDriveEmbedUrl(teamMember.ImageRight)
-          });
+        const response = await fetch(`${API_ENDPOINT}/team`);
+        const data = await response.json();
+        
+        if (data) {
+          const processedData = {
+            ...data,
+            imageLeft: data.imageLeft ? `${API_URL}${data.imageLeft}` : '',
+            imageRight: data.imageRight ? `${API_URL}${data.imageRight}` : ''
+          };
+          
+          setTeamData(processedData);
         } else {
           setError('Error fetching team data');
         }
@@ -58,8 +54,8 @@ const TeamContent = () => {
 
   if (error) {
     return (
-      <div 
-        className={styles.error} 
+      <div
+        className={styles.error}
         style={{ color: colors.RED, fontFamily: police.style.fontFamily }}
       >
         {error}
@@ -79,27 +75,37 @@ const TeamContent = () => {
       <div className={styles.teamMembersContainer}>
         {/* Left Member */}
         <div className={styles.memberCard}>
-          <img
-            src={teamData.ImageLeft}
-            className={styles.memberImage}
-            alt={`Team member ${teamData.DescriptionLeft}`}
-            loading="lazy"
-          />
+          <div className={styles.imageWrapper}>
+            <Image
+              src={teamData.imageLeft}
+              alt="Team member left"
+              width={400}
+              height={400}
+              className={styles.memberImage}
+              priority
+              unoptimized
+            />
+          </div>
           <p className={styles.memberDescription}>
-            {teamData.DescriptionLeft}
+            {teamData.descriptionLeft}
           </p>
         </div>
 
         {/* Right Member */}
         <div className={styles.memberCard}>
-          <img
-            src={teamData.ImageRight}
-            className={styles.memberImage}
-            alt={`Team member ${teamData.DescriptionRight}`}
-            loading="lazy"
-          />
+          <div className={styles.imageWrapper}>
+            <Image
+              src={teamData.imageRight}
+              alt="Team member right"
+              width={400}
+              height={400}
+              className={styles.memberImage}
+              priority
+              unoptimized
+            />
+          </div>
           <p className={styles.memberDescription}>
-            {teamData.DescriptionRight}
+            {teamData.descriptionRight}
           </p>
         </div>
       </div>
@@ -108,7 +114,7 @@ const TeamContent = () => {
         className={styles.generalDescription}
         style={{ backgroundColor: `${colors.BEIGE}CC` }}
       >
-        {teamData.Description}
+        {teamData.description}
       </p>
     </div>
   );
