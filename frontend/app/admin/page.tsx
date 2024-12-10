@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { fetchWithAuth } from './utils/api';
 
 const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -14,7 +15,7 @@ const LoginPage: React.FC = () => {
     setError('');
     setIsLoading(true);
     try {
-      const response = await fetch('https://64.226.114.142:3443/api/auth', {
+      const response = await fetchWithAuth('https://64.226.114.142:3443/api/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

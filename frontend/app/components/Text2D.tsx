@@ -4,6 +4,7 @@ import { Text } from '@react-three/drei';
 import { colors } from '@/app/styles/styles';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { fetchWithAuth } from '@/app/admin/utils/api';
 
 interface MenuItem {
   id: number;
@@ -18,8 +19,6 @@ interface Category {
   name: string;
   items: MenuItem[];
 }
-
-const API_URL = 'https://64.226.114.142:3443/api';
 
 const VegetarianIcon: React.FC<{ position: [number, number, number]; opacity: number }> = ({ position, opacity }) => (
   <group position={position}>
@@ -56,7 +55,7 @@ export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const response = await fetch(`${API_URL}/menu`);
+        const response = await fetchWithAuth('/menu');
         const data = await response.json();
         setMenuData(data);
       } catch (error) {

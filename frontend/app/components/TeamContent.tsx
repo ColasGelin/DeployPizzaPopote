@@ -4,6 +4,7 @@ import { colors } from '@/app/styles/styles';
 import { police } from '@/app/styles/fonts';
 import styles from '../styles/TeamContent.module.css';
 import Image from 'next/image';
+import { fetchWithAuth } from '@/app/admin/utils/api';
 
 interface TeamMember {
   descriptionLeft: string;
@@ -13,8 +14,7 @@ interface TeamMember {
   description: string;
 }
 
-const API_URL = 'https://64.226.114.142:3443';
-const API_ENDPOINT = `${API_URL}/api`;
+const API_URL = 'https://64.226.114.142:3443'; // Keep for image URLs only
 
 const TeamContent = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -28,7 +28,7 @@ const TeamContent = () => {
 
     const fetchTeam = async () => {
       try {
-        const response = await fetch(`${API_ENDPOINT}/team`);
+        const response = await fetchWithAuth('/team');
         const data = await response.json();
         
         if (data) {
@@ -37,7 +37,6 @@ const TeamContent = () => {
             imageLeft: data.imageLeft ? `${API_URL}${data.imageLeft}` : '',
             imageRight: data.imageRight ? `${API_URL}${data.imageRight}` : ''
           };
-          
           setTeamData(processedData);
         } else {
           setError('Error fetching team data');

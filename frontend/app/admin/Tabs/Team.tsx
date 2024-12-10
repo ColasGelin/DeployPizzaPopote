@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { fetchWithAuth } from '@/app/admin/utils/api';
 
 interface TeamInfo {
   description: string;
@@ -23,8 +24,8 @@ export function TeamComponent() {
 
   const fetchTeam = async () => {
     try {
-      const res = await fetch('https://64.226.114.142:3443/api/team');
-      const data = await res.json();
+      const response = await fetchWithAuth('/team');
+      const data = await response.json();
       setTeamInfo(data);
     } catch (error) {
       console.error('Error fetching team info:', error);
@@ -34,9 +35,8 @@ export function TeamComponent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch('https://64.226.114.142:3443/api/team', {
+      await fetchWithAuth('/team', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(teamInfo)
       });
       fetchTeam();

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
+import { fetchWithAuth } from '@/app/admin/utils/api';
 
 interface ContactInfo {
   instagram: string;
@@ -21,23 +22,22 @@ export function ContactComponent() {
 
   const fetchContact = async () => {
     try {
-      const res = await fetch('https://64.226.114.142:3443/api/contact');
-      const data = await res.json();
+      const response = await fetchWithAuth('/contact');
+      const data = await response.json();
       setContactInfo(data);
     } catch (error) {
-      console.error('Error fetching contact info:', error);
+      console.error('Error fetching contact information:', error);
     }
   };
-
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch('https://64.226.114.142:3443/api/contact', {
+      await fetchWithAuth('/contact', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(contactInfo)
       });
-      fetchContact();
+      fetchContact(); // Refresh data after successful update
     } catch (error) {
       console.error('Error updating contact info:', error);
     }

@@ -3,6 +3,7 @@
 import React, { ReactNode, useState, useEffect } from 'react';
 import { Chewy } from 'next/font/google';
 import { colors } from '../styles/styles';
+import { fetchWithAuth } from '../admin/utils/api';
 
 export const police = Chewy({ subsets: ['latin'], weight: '400' });
 
@@ -85,7 +86,7 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({ isCompact }) => {
   useEffect(() => {
     const fetchContactInfo = async () => {
       try {
-        const response = await fetch('https://64.226.114.142:3443/api/contact');
+        const response = await fetchWithAuth('/contact');
         const data = await response.json();
         console.log("data", data);
         setContactInfo(data);
@@ -93,7 +94,6 @@ const ContactButtons: React.FC<ContactButtonsProps> = ({ isCompact }) => {
         console.error('Error fetching contact information:', error);
       }
     };
-
     fetchContactInfo();
   }, []);
 

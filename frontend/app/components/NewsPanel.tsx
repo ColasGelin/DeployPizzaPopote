@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { PanelBackgroundConfig } from './PanelBackgroundConfig';
 import PanelBackground from '@/app/components/PanelBackground';
 import { NewsItem } from '@/app/admin/types';
+import { fetchWithAuth } from '../admin/utils/api';
 
 interface NewsPanelProps {
   isTreesAnimating?: boolean;
@@ -10,21 +11,21 @@ interface NewsPanelProps {
 
 const useNewsPlaneConfig = () => {
   const [planeConfig, setPlaneConfig] = useState<typeof PanelBackgroundConfig>([]);
-  const API_URL = 'https://64.226.114.142:3443';
-  const API_ENDPOINT = `${API_URL}/api`;
+  const API_URL = 'https://64.226.114.142:3443'; // Keep this for image URLs only
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(`${API_ENDPOINT}/news`);
+        const response = await fetchWithAuth('/news');
         const newsData: NewsItem[] = await response.json();
+        
         const newConfig = PanelBackgroundConfig.map((layout, index) => {
           const newsItem = newsData[index];
           if (!newsItem) return layout;
-          
-          // Fix the image URL construction
-          const imageUrl = newsItem.image 
-            ? `${API_URL}${newsItem.image}` // Remove /api from the image URL
+
+          // Construct image URL using the base API_URL
+          const imageUrl = newsItem.image
+            ? `${API_URL}${newsItem.image}`
             : layout.imageUrl;
 
           return {
@@ -44,6 +45,7 @@ const useNewsPlaneConfig = () => {
             }
           };
         });
+
         console.log("newConfig", newConfig);
         setPlaneConfig(newConfig);
       } catch (error) {
@@ -51,6 +53,7 @@ const useNewsPlaneConfig = () => {
         setPlaneConfig(PanelBackgroundConfig);
       }
     };
+
     fetchNews();
   }, []);
 
@@ -59,7 +62,7 @@ const useNewsPlaneConfig = () => {
 
 const NewsPanel: React.FC<NewsPanelProps> = ({ isTreesAnimating = false }) => {
   const planeConfig = useNewsPlaneConfig();
-  
+
   if (planeConfig.length === 0) return null;
 
   return (

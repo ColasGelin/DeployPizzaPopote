@@ -79,7 +79,6 @@ export default function MenuPage() {
     try {
       const response = await fetchWithAuth('/menu/categories', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name })
       });
       
