@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: 'La plus sympa des pizzas',
   icons: {
     icon: [
-      { url: '/favicon/favicon.svg', type: 'image/svg+xml', sizes: '360x360'},
+      { url: '/favicon/favicon.svg', type: 'image/svg+xml', sizes: '512x512'},
     ],
     apple: [
       { url: '/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
