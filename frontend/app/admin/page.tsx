@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
     setError('');
     setIsLoading(true);
     try {
-      const response = await fetchWithAuth('https://64.226.114.142:3443/api/auth', {
+      const response = await fetchWithAuth('/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

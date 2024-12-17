@@ -11,7 +11,7 @@ interface NewsPanelProps {
 
 const useNewsPlaneConfig = () => {
   const [planeConfig, setPlaneConfig] = useState<typeof PanelBackgroundConfig>([]);
-  const API_URL = 'https://64.226.114.142:3443'; // Keep this for image URLs only
+  const API_URL = 'https://pizzapopote.com'; // Keep this for image URLs only
 
   useEffect(() => {
     const fetchNews = async () => {

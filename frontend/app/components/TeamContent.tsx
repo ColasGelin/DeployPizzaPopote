@@ -14,7 +14,7 @@ interface TeamMember {
   description: string;
 }
 
-const API_URL = 'https://64.226.114.142:3443'; // Keep for image URLs only
+const API_URL = 'https://pizzapopote.com'; // Keep for image URLs only
 
 const TeamContent = () => {
   const [isVisible, setIsVisible] = useState(false);

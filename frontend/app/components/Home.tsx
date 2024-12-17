@@ -44,7 +44,15 @@ export default function Home() {
   }, [isTreesAnimating]);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+    <div style={{
+      width: '100vw',
+      height: '100vh',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      overflow: 'hidden',
+      touchAction: 'none'
+    }}>
       <SceneCanvas
         cameraPosition={cameraPosition}
         cameraTilt={cameraTilt}
