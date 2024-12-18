@@ -62,7 +62,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
         `}>
           <div className="relative" style={floatingAnimation}>
             <Image
-              src="/Logo Couleurs.png"
+              src="/LogoPizzaPopote.png"
               alt="PizzaPopote Logo"
               width={120}
               height={120}
