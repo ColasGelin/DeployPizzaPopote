@@ -18,7 +18,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     transform: translate(-50%, -50%);
     width: 150px;
-    background: rgba(236, 236, 238, 0.253);
+    background: rgba(249, 198, 81, 0.253);
     height: 10px;
     border-radius: 7px;
     overflow: hidden;
@@ -28,7 +28,7 @@ const StyledWrapper = styled.div`
     width: 1px;
     height: 10px;
     border-radius: 7px;
-    background: rgb(255, 255, 255);
+    background: rgb(249, 198, 81);
     transition: 0.5s;
     animation: loading_44 2s cubic-bezier(0.4, 1.01, 1, 1) forwards;
   }

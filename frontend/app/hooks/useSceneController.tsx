@@ -15,10 +15,10 @@ export const useSceneController = () => {
 
   // Define all positions
   const initialDesktopPosition: Position = { x: 0, y: 8, z: 30 };
-  const initialMobilePosition: Position = { x: 0, y: 2, z: 30 };
+  const initialMobilePosition: Position = { x: 0, y: 2, z: 40 };
 
   const desktopDiscoverPosition: Position = { x: -3.8, y: 1, z: 7 };
-  const mobileDiscoverPosition: Position = { x: -3.6, y: 1, z: 15 };
+  const mobileDiscoverPosition: Position = { x: -3.6, y: 1, z: 20 };
   const DiscoverTilt: number = MathUtils.degToRad(4.5);
 
   const desktopDefaultTabPosition: Position = { x: 0, y: 2, z: 5 };
@@ -28,7 +28,7 @@ export const useSceneController = () => {
   const mobileEquipePosition: Position = { x: -3.85, y: 2, z: 6.5 };
 
   const desktopPizzasPosition: Position = { x: -1.5, y: 2.3, z: 3 };
-  const mobilePizzasPosition: Position = { x: -1.5, y: 2.3, z: 4 };
+  const mobilePizzasPosition: Position = { x: -1.5, y: 2.3, z: 4.5 };
 
   // State for all positions
   const [initialPosition, setInitialPosition] = useState<Position>(initialDesktopPosition);
@@ -103,12 +103,12 @@ export const useSceneController = () => {
     x: -5,
     y: 2,
     z: 4,
-    minX: -4.9,
+    minX: -4.5,
     maxY: 2,
-    minZ: 4,
-    maxX: -4.45  ,
+    minZ: 4.4,
+    maxX: -4.05  ,
     minY: 0.4,
-    maxZ: 4.2
+    maxZ: 4.6
   };
 
   const actualitesScrollRef = useRef<ActualitesScrollRef>(
@@ -206,15 +206,14 @@ export const useSceneController = () => {
       }
 
       if (activeTab === 'Nos pizzas') {
-        const newY = Math.max(0.7, Math.min(2.3, cameraYRef.current - deltaY * 0.001));
+        const newY = Math.max(1, Math.min(2.3, cameraYRef.current - deltaY * 0.001));
         cameraYRef.current = newY;
         
         const baseX = -1.5;
         // Invert the scroll progress (1 at top, 0 at bottom)
         const scrollProgress = 1 - ((newY - 0.7) / (2.3 - 0.7));
-        const xOffset = scrollProgress * .06; // Now 0.05 at top, 0 at bottom
+        const xOffset = scrollProgress * .2; // Now 0.05 at top, 0 at bottom
         
-        console.log('xOffset', xOffset);
         setCameraPosition(prev => ({
             ...prev,
             y: newY,

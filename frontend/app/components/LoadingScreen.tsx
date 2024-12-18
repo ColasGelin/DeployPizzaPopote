@@ -7,8 +7,8 @@ interface LoadingScreenProps {
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
-  const [exitState, setExitState] = useState<'visible' | 'scaling' | 'exiting'>('visible');
-
+  const [isExiting, setIsExiting] = useState(false);
+  
   const floatingAnimation = {
     animation: 'floatingLogo 3s ease-in-out infinite',
   };
@@ -25,19 +25,12 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
   `;
 
   useEffect(() => {
-    const scaleTimer = setTimeout(() => {
-      setExitState('scaling');
+    const timer = setTimeout(() => {
+      setIsExiting(true);
+      setTimeout(onLoadingComplete, 1000);
     }, 2000);
 
-    const exitTimer = setTimeout(() => {
-      setExitState('exiting');
-      setTimeout(onLoadingComplete, 1000);
-    }, 2400);
-
-    return () => {
-      clearTimeout(scaleTimer);
-      clearTimeout(exitTimer);
-    };
+    return () => clearTimeout(timer);
   }, [onLoadingComplete]);
 
   return (
@@ -47,19 +40,12 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
         className={`
           fixed inset-0 z-50
           flex flex-col items-center justify-center gap-8
-          transition-all duration-1000 ease-in-out
-          ${exitState === 'scaling' ? 'scale-150 opacity-90' : ''}
-          ${exitState === 'exiting' ? 'scale-150 opacity-0 blur-xl' : ''}
+          transition-opacity duration-1000 ease-in-out
+          ${isExiting ? 'opacity-0' : 'opacity-100'}
         `}
         style={{ backgroundColor: '#a7e3ed' }}
       >
-        <div className={`
-          transition-transform duration-1000 ease-in-out
-          flex flex-col items-center justify-center
-          space-y-8
-          ${exitState === 'scaling' ? 'scale-75' : ''}
-          ${exitState === 'exiting' ? 'scale-0' : ''}
-        `}>
+        <div className="flex flex-col items-center justify-center space-y-8">
           <div className="relative" style={floatingAnimation}>
             <Image
               src="/LogoPizzaPopote.png"
