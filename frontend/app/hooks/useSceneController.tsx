@@ -103,11 +103,11 @@ export const useSceneController = () => {
     x: -5,
     y: 2,
     z: 4,
-    minX: -5,
+    minX: -4.9,
     maxY: 2,
     minZ: 4,
-    maxX: -4.8,
-    minY: 0.9,
+    maxX: -4.45  ,
+    minY: 0.4,
     maxZ: 4.2
   };
 
@@ -159,6 +159,7 @@ export const useSceneController = () => {
             const newX = newRef.minX + (newRef.maxX - newRef.minX) * progress;
             const newZ = newRef.minZ + (newRef.maxZ - newRef.minZ) * progress;
             setCameraPosition({ x: newX, y: newY, z: newZ });
+            setCameraTilt(0.35)
             break;
           case 'L\'équipe':
             setCameraPosition(newIsMobile ? mobileEquipePosition : desktopEquipePosition);
@@ -205,10 +206,22 @@ export const useSceneController = () => {
       }
 
       if (activeTab === 'Nos pizzas') {
-        const newY = Math.max(0.6, Math.min(2.3, cameraYRef.current - deltaY * 0.001));
+        const newY = Math.max(0.7, Math.min(2.3, cameraYRef.current - deltaY * 0.001));
         cameraYRef.current = newY;
-        setCameraPosition(prev => ({ ...prev, y: newY }));
+        
+        const baseX = -1.5;
+        // Invert the scroll progress (1 at top, 0 at bottom)
+        const scrollProgress = 1 - ((newY - 0.7) / (2.3 - 0.7));
+        const xOffset = scrollProgress * .06; // Now 0.05 at top, 0 at bottom
+        
+        console.log('xOffset', xOffset);
+        setCameraPosition(prev => ({
+            ...prev,
+            y: newY,
+            x: baseX + xOffset
+        }));
         setCameraLookAt(prev => ({ ...prev, y: newY }));
+        
         setShowScrollIndicator(newY >= 1);
       } else if (activeTab === 'Actualités') {
         const scrollAmount = deltaY * 0.001;
@@ -233,6 +246,7 @@ export const useSceneController = () => {
           setCameraTilt(0.4);
         } else {
           setCameraLookAt(prev => ({ ...prev, y: newY - 1.5 }));
+          setCameraTilt(0.35);
         }
 
         setShowScrollIndicator(newY > ref.minY);

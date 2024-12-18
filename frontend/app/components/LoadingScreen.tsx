@@ -1,53 +1,80 @@
-'use client'
-
 import React, { useState, useEffect } from 'react';
-import { colors } from '@/app/styles/styles';
+import Loader from './ui/Loader';
+import Image from 'next/image';
+
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete }) => {
-  const [loading, setLoading] = useState(true);
+  const [exitState, setExitState] = useState<'visible' | 'scaling' | 'exiting'>('visible');
+
+  const floatingAnimation = {
+    animation: 'floatingLogo 3s ease-in-out infinite',
+  };
+
+  const keyframes = `
+    @keyframes floatingLogo {
+      0%, 100% {
+        transform: translateY(-10px);
+      }
+      50% {
+        transform: translateY(0px);
+      }
+    }
+  `;
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-      onLoadingComplete();
-    }, 100); // Ensure the loading screen shows for at least 2 seconds
+    const scaleTimer = setTimeout(() => {
+      setExitState('scaling');
+    }, 2000);
 
-    return () => clearTimeout(timer);
+    const exitTimer = setTimeout(() => {
+      setExitState('exiting');
+      setTimeout(onLoadingComplete, 1000);
+    }, 2400);
+
+    return () => {
+      clearTimeout(scaleTimer);
+      clearTimeout(exitTimer);
+    };
   }, [onLoadingComplete]);
 
-  if (!loading) return null;
-
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: colors.BEIGE,
-      zIndex: 1000,
-    }}>
-      <div style={{
-        width: '50px',
-        height: '50px',
-        border: '5px solid ' + colors.YELLOW,
-        borderTop: '5px solid ' + colors.RED,
-        borderRadius: '50%',
-        animation: 'spin 1s linear infinite',
-      }} />
-      <style jsx>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
-    </div>
+    <>
+      <style>{keyframes}</style>
+      <div
+        className={`
+          fixed inset-0 z-50
+          flex flex-col items-center justify-center gap-8
+          transition-all duration-1000 ease-in-out
+          ${exitState === 'scaling' ? 'scale-150 opacity-90' : ''}
+          ${exitState === 'exiting' ? 'scale-150 opacity-0 blur-xl' : ''}
+        `}
+        style={{ backgroundColor: '#a7e3ed' }}
+      >
+        <div className={`
+          transition-transform duration-1000 ease-in-out
+          flex flex-col items-center justify-center
+          space-y-8
+          ${exitState === 'scaling' ? 'scale-75' : ''}
+          ${exitState === 'exiting' ? 'scale-0' : ''}
+        `}>
+          <div className="relative" style={floatingAnimation}>
+            <Image
+              src="/Logo Couleurs.png"
+              alt="PizzaPopote Logo"
+              width={120}
+              height={120}
+              priority
+            />
+          </div>
+          <div className="relative">
+            <Loader />
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

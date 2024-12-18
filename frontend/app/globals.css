@@ -67,13 +67,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-html, body {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: none;
-  touch-action: none;
-}

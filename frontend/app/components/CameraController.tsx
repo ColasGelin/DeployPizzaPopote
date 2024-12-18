@@ -13,9 +13,18 @@ export function CameraController({ position, lookAt, tilt = 0 }: CameraControlle
   const { camera } = useThree();
   const targetPosition = useRef(new Vector3(position.x, position.y, position.z));
   const targetLookAt = useRef(new Vector3(lookAt.x, lookAt.y, lookAt.z));
-  const currentLookAt = useRef(new Vector3(lookAt.x, lookAt.y, lookAt.z));
+  const currentLookAt = useRef(new Vector3());
   const targetTilt = useRef(tilt);
   const currentTilt = useRef(camera.rotation.z);
+  const isFirstFrame = useRef(true);
+
+  // Initialize currentLookAt on mount
+  useEffect(() => {
+    const lookAtVector = new Vector3();
+    camera.getWorldDirection(lookAtVector);
+    lookAtVector.multiplyScalar(10).add(camera.position);
+    currentLookAt.current.copy(lookAtVector);
+  }, []);
 
   useEffect(() => {
     targetPosition.current.set(position.x, position.y, position.z);
@@ -27,15 +36,24 @@ export function CameraController({ position, lookAt, tilt = 0 }: CameraControlle
   }, [tilt]);
 
   useFrame(() => {
+    if (isFirstFrame.current) {
+      const lookAtVector = new Vector3();
+      camera.getWorldDirection(lookAtVector);
+      lookAtVector.multiplyScalar(10).add(camera.position);
+      currentLookAt.current.copy(lookAtVector);
+      isFirstFrame.current = false;
+    }
+
     if (!camera.position.equals(targetPosition.current)) {
       camera.position.lerp(targetPosition.current, 0.02);
     }
+
     if (!currentLookAt.current.equals(targetLookAt.current)) {
       currentLookAt.current.lerp(targetLookAt.current, 0.02);
       camera.lookAt(currentLookAt.current);
     }
-    
-    // Smooth tilt transition
+
+    // Keeping original tilt handling
     currentTilt.current += (targetTilt.current - currentTilt.current) * 0.02;
     camera.rotation.z = currentTilt.current;
   });
