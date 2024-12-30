@@ -1,14 +1,22 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { useRouter } from 'next/navigation';
 import { fetchWithAuth } from './utils/api';
+import { isAuthenticated } from './utils/auth';
 
 const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    // Check if user is already authenticated
+    if (isAuthenticated()) {
+      router.push('/admin/dashboard');
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +31,6 @@ const LoginPage: React.FC = () => {
         body: JSON.stringify({ password }),
       });
       const data = await response.json();
-      console.log(data.success, data.token);
       if (data.success && data.token) { // Check for token
         localStorage.setItem('authToken', data.token); // Save token
         router.push('/admin/dashboard');

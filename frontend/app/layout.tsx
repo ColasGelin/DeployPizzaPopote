@@ -46,21 +46,15 @@ async function generateMetadata(): Promise<Metadata> {
     description: 'PizzaPopote, votre pizzeria chaleureuse et engagée. Découvrez nos pizzas artisanales préparées avec des produits frais de producteurs locaux.',
     keywords: 'pizzeria, pizza artisanale, produits locaux, restaurant convivial, pizzas maison, producteurs locaux, pizza authentique, restaurant sympathique',
     openGraph: {
-      title: 'PizzaPopote | Pizzeria artisanale et conviviale',
+      title: 'Pizza Po\'pote | Pizzeria artisanale et conviviale',
       description: 'Découvrez nos pizzas artisanales préparées avec des produits frais de producteurs locaux.',
       url: 'https://pizzapopote.com',
-      siteName: 'PizzaPopote',
+      siteName: 'Pizza Po\'pote',
       images: [
         {
-          url: '/favicon/favicon-96x96.png',
-          width: 1200,
-          height: 630,
-          alt: 'PizzaPopote - Logo',
-        },
-        {
-          url: '/favicon/favicon.svg',
-          width: 512,
-          height: 512,
+          url: '/favicon/DisplayInstagram.png',
+          width: 2310,
+          height: 1332,
           alt: 'PizzaPopote - Logo SVG',
         },
       ],

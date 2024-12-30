@@ -55,7 +55,6 @@ export function MenuComponent({
       hasVegetarianIcon: Boolean(newMenuItem.hasVegetarianIcon)
     };
 
-    console.log('Submitting item:', itemToAdd); // Debug log
     onAddMenuItem(itemToAdd);
 
     setNewMenuItem({

@@ -21,7 +21,7 @@
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 0 10px;
+  margin: 0 10px; 
   animation: growButton 0.5s ease-out forwards;
   opacity: 0;
   transform: scale(0);
@@ -72,6 +72,10 @@
     top: 2%; /* Adjusted for mobile */
     width: 90%; /* Control the width on mobile */
     align-items: center;
+  }
+
+  .tabButton {
+    margin: 0 5px !important; /* Override the inline style margin */
   }
 
   /* Mobile-specific animations */

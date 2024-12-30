@@ -15,7 +15,7 @@ export const useSceneController = () => {
 
   // Define all positions
   const initialDesktopPosition: Position = { x: 0, y: 8, z: 30 };
-  const initialMobilePosition: Position = { x: 0, y: 2, z: 40 };
+  const initialMobilePosition: Position = { x: 0, y: 8, z: 40 };
 
   const desktopDiscoverPosition: Position = { x: -3.8, y: 1, z: 7 };
   const mobileDiscoverPosition: Position = { x: -3.6, y: 1, z: 20 };
