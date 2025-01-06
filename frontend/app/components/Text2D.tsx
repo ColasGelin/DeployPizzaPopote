@@ -176,10 +176,10 @@ export const Text2D: React.FC<{ isTreesAnimating?: boolean }> = ({
                     }
                   </group>
                   <Text
-                    position={[0, item.description ? -0.05 : 0, 0]}
+                    position={[0, item.description ? -0.07 : 0, 0]}
                     color={colors.YELLOW}
                     fontSize={0.03}
-                    maxWidth={2}
+                    maxWidth={0.7}
                     lineHeight={1.2}
                     letterSpacing={0.01}
                     textAlign="left"

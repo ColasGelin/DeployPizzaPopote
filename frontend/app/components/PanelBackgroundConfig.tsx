@@ -44,7 +44,7 @@ type PlaneItem = {
     borderSize: 0.01,
     text: {
         text: "",
-        position: [0.33, 0.38],
+        position: [0.32, 0.36],
         color: "black",
         size: 0.03,
         boxWidth: 0.25,
