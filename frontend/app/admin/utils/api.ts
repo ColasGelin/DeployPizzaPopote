@@ -19,7 +19,7 @@ export async function fetchWithAuth(endpoint: string, options: RequestInit = {})
     try {
       const response = await fetch(`${API_URL}${endpoint}`, configuredOptions);
     
-    if (response.status === 401 || response.status === 403) {
+    if (response.status === 401) {
       if (typeof window !== 'undefined') {
         window.location.href = '/admin';
       }
