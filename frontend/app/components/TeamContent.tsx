@@ -3,18 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { colors } from '@/app/styles/styles';
 import { police } from '@/app/styles/fonts';
 import styles from '../styles/TeamContent.module.css';
-import Image from 'next/image';
 import { fetchWithAuth } from '@/app/admin/utils/api';
 
 interface TeamMember {
   descriptionLeft: string;
   descriptionRight: string;
-  imageLeft: string;
-  imageRight: string;
   description: string;
 }
-
-const API_URL = 'https://pizzapopote.com'; // Keep for image URLs only
 
 const TeamContent = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -30,14 +25,8 @@ const TeamContent = () => {
       try {
         const response = await fetchWithAuth('/team');
         const data = await response.json();
-        
         if (data) {
-          const processedData = {
-            ...data,
-            imageLeft: data.imageLeft ? `${API_URL}${data.imageLeft}` : '',
-            imageRight: data.imageRight ? `${API_URL}${data.imageRight}` : ''
-          };
-          setTeamData(processedData);
+          setTeamData(data);
         } else {
           setError('Error fetching team data');
         }
@@ -69,52 +58,26 @@ const TeamContent = () => {
   return (
     <div
       className={`${styles.container} ${isVisible ? styles.fadeIn : styles.fadeOut}`}
-      style={{ color: colors.GREEN, fontFamily: police.style.fontFamily }}
+      style={{ color: colors.BEIGE, fontFamily: police.style.fontFamily }}
     >
+      <p
+        className={styles.generalDescription}
+        style={{ backgroundColor: `${colors.BLUE}CC` }}
+      >
+        {teamData.description}
+      </p>
       <div className={styles.teamMembersContainer}>
-        {/* Left Member */}
         <div className={styles.memberCard}>
-          <div className={styles.imageWrapper}>
-            <Image
-              src={teamData.imageLeft}
-              alt="Team member left"
-              width={400}
-              height={400}
-              className={styles.memberImage}
-              priority
-              unoptimized
-            />
-          </div>
           <p className={styles.memberDescription}>
             {teamData.descriptionLeft}
           </p>
         </div>
-
-        {/* Right Member */}
         <div className={styles.memberCard}>
-          <div className={styles.imageWrapper}>
-            <Image
-              src={teamData.imageRight}
-              alt="Team member right"
-              width={400}
-              height={400}
-              className={styles.memberImage}
-              priority
-              unoptimized
-            />
-          </div>
           <p className={styles.memberDescription}>
             {teamData.descriptionRight}
           </p>
         </div>
       </div>
-
-      <p
-        className={styles.generalDescription}
-        style={{ backgroundColor: `${colors.BEIGE}CC` }}
-      >
-        {teamData.description}
-      </p>
     </div>
   );
 };

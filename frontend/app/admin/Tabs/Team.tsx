@@ -98,25 +98,6 @@ export function TeamComponent() {
               rows={4}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Left Image
-              </label>
-              <input
-                type="file"
-                name="imageLeft"
-                onChange={handleChange}
-                accept="image/*"
-                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-              {teamInfo.imageLeft && (
-                <img 
-                  src={teamInfo.imageLeft} 
-                  alt="Left team" 
-                  className="mt-2 h-32 object-cover rounded-lg"
-                />
-              )}
-            </div>
           </div>
 
           <div>
@@ -130,25 +111,6 @@ export function TeamComponent() {
               rows={4}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Right Image
-              </label>
-              <input
-                type="file"
-                name="imageRight"
-                onChange={handleChange}
-                accept="image/*"
-                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-              {teamInfo.imageRight && (
-                <img 
-                  src={teamInfo.imageRight} 
-                  alt="Right team" 
-                  className="mt-2 h-32 object-cover rounded-lg"
-                />
-              )}
-            </div>
           </div>
         </div>
 
