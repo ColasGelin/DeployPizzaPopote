@@ -5,6 +5,7 @@ import { UmamiAnalytics } from './components/UmamiAnalytics'
 
 async function generateMetadata(): Promise<Metadata> {
   const menuSchema = await generateMenuSchema()
+  
   const fullSchema = {
     '@context': 'https://schema.org',
     '@type': 'Restaurant',
@@ -90,6 +91,8 @@ async function generateMetadata(): Promise<Metadata> {
     }
   }
 }
+
+export const metadata = generateMetadata()
 
 export default function RootLayout({
   children,
