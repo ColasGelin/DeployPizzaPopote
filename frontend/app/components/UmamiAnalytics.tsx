@@ -7,7 +7,7 @@ export function UmamiAnalytics() {
     const script = document.createElement('script');
     script.defer = true;
     script.src = 'https://cloud.umami.is/script.js';
-    script.setAttribute('data-website-id', '3347e1a7-b39b-43ac-aadc-ded2d60fe4c');
+    script.setAttribute('data-website-id', '917396ad-126f-4488-a9c7-14da37d88d2d');
     
     document.head.appendChild(script);
 
