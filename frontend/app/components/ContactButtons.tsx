@@ -25,6 +25,7 @@ interface ContactInfo {
 
 const IconButton: React.FC<IconButtonProps> = ({ href, ariaLabel, children, shape, text, isCompact }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [hoverStartTime, setHoverStartTime] = useState<number | null>(null);
 
   const handleClick = () => {
     trackEvent('contact_click', {
@@ -34,12 +35,25 @@ const IconButton: React.FC<IconButtonProps> = ({ href, ariaLabel, children, shap
     });
   };
 
-  const handleHover = () => {
+  const handleHoverStart = () => {
     setIsHovered(true);
-    trackEvent('contact_hover', {
-      type: ariaLabel,
-      text: text
-    });
+    setHoverStartTime(Date.now());
+  };
+
+  const handleHoverEnd = () => {
+    setIsHovered(false);
+    if (hoverStartTime) {
+      const hoverDuration = Date.now() - hoverStartTime;
+      // Only track if hover was longer than 100ms to filter out accidental hovers
+      if (hoverDuration > 100) {
+        trackEvent('contact_hover', {
+          type: ariaLabel,
+          text: text,
+          durationMs: hoverDuration
+        });
+      }
+      setHoverStartTime(null);
+    }
   };
 
   return (
@@ -49,7 +63,8 @@ const IconButton: React.FC<IconButtonProps> = ({ href, ariaLabel, children, shap
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick} 
-      onMouseEnter={handleHover}
+      onMouseEnter={handleHoverStart}
+      onMouseLeave={handleHoverEnd}
       style={{
         display: 'inline-flex',
         justifyContent: 'flex-start',
@@ -67,7 +82,6 @@ const IconButton: React.FC<IconButtonProps> = ({ href, ariaLabel, children, shap
         textDecoration: 'none',
         fontFamily: police.style.fontFamily,
       }}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <div style={{
         display: 'flex',

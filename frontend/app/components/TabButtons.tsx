@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react';
 import styles from '@/app/styles/TabButtons.module.css';
 import { police } from '../styles/fonts';
@@ -23,6 +22,7 @@ interface TabButtonsProps {
 
 const TabButton: React.FC<TabButtonProps> = ({isExiting, title, isActive, onClick, shape, delay }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [hoverStartTime, setHoverStartTime] = useState<number | null>(null);
 
   const handleClick = () => {
     trackEvent('Navigation Click', {
@@ -32,19 +32,23 @@ const TabButton: React.FC<TabButtonProps> = ({isExiting, title, isActive, onClic
     onClick(title);
   };
 
-  const handleHover = () => {
+  const handleHoverStart = () => {
     setIsHovered(true);
-    const hoverStartTime = Date.now();
-    
-    return () => {
+    setHoverStartTime(Date.now());
+  };
+
+  const handleHoverEnd = () => {
+    setIsHovered(false);
+    if (hoverStartTime) {
       const hoverDuration = Date.now() - hoverStartTime;
-      if (hoverDuration > 300) { // Only track meaningful hovers
+      if (hoverDuration > 300) {
         trackEvent('Navigation Hover', {
           tab: title,
           durationMs: hoverDuration
         });
       }
-    };
+    }
+    setHoverStartTime(null);
   };
 
   const getColor = () => {
@@ -59,11 +63,8 @@ const TabButton: React.FC<TabButtonProps> = ({isExiting, title, isActive, onClic
   return (
     <button
       onClick={handleClick}
-      onMouseEnter={() => {
-        const cleanup = handleHover();
-        return () => cleanup();
-      }}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleHoverStart}
+      onMouseLeave={handleHoverEnd}
       className={`${styles.tabButton} ${isExiting ? styles.exiting : ''} ${styles.hoverGrow}`}
       style={{
         animationDelay: isExiting ? `` : `${delay}s`,
@@ -80,13 +81,54 @@ const TabButton: React.FC<TabButtonProps> = ({isExiting, title, isActive, onClic
 
 export const TabButtons: React.FC<TabButtonsProps> = ({ activeTab, setActiveTab, isExiting }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [tabStartTime, setTabStartTime] = useState<number | null>(null);
+  const [currentTab, setCurrentTab] = useState<string | null>(null);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
+  useEffect(() => {
+    if (activeTab && !isExiting) {
+      const startTime = Date.now();
+      setTabStartTime(startTime);
+      setCurrentTab(activeTab);
+    } else if (isExiting && currentTab) {
+      if (tabStartTime) {
+        const timeSpent = Date.now() - tabStartTime;
+        trackEvent('Tab View Duration', {
+          tab: currentTab,
+          durationMs: timeSpent,
+          exitType: 'return_button'
+        });
+      }
+      setTabStartTime(null);
+      setCurrentTab(null);
+    }
+
+    return () => {
+      if (tabStartTime && currentTab) {
+        const timeSpent = Date.now() - tabStartTime;
+        trackEvent('Tab View Duration', {
+          tab: currentTab,
+          durationMs: timeSpent,
+          exitType: 'tab_switch'
+        });
+      }
+    };
+  }, [activeTab, isExiting, currentTab]);
+
   const handleTabClick = (tabTitle: string) => {
-    console.log(`Tab clicked: ${tabTitle}`); // Add this for debugging
+    if (tabStartTime && currentTab && currentTab !== tabTitle) {
+      const timeSpent = Date.now() - tabStartTime;
+      trackEvent('Tab View Duration', {
+        tab: currentTab,
+        durationMs: timeSpent,
+        exitType: 'tab_switch'
+      });
+    }
+    
+    console.log(`Tab clicked: ${tabTitle}`);
     setActiveTab(tabTitle);
   };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TabButtons } from './TabButtons';
 import ContactButtons from './ContactButtons';
 import TeamContent from './TeamContent';
@@ -38,13 +38,7 @@ const ButtonsAndOverlay: React.FC<ButtonsAndOverlayProps> = ({
 }) => {
   const [isLegalOpen, setIsLegalOpen] = useState(false);
 
-  useEffect(() => {
-    const loadTime = performance.now();
-    trackEvent('Landing Page Loaded', {
-      timeStamp: new Date().toISOString(),
-      loadTimeMs: Math.round(loadTime)
-    });
-  }, []);
+  const [hoverStartTime, setHoverStartTime] = useState<number | null>(null);
 
   // Track discover button interactions
   const handleDiscoverButton = () => {
@@ -56,17 +50,22 @@ const ButtonsAndOverlay: React.FC<ButtonsAndOverlayProps> = ({
 
   // Track hover duration
   const handleButtonHover = () => {
-    const hoverStartTime = Date.now();
+    setHoverStartTime(Date.now());
     setIsButtonHovered(true);
-    
-    return () => {
+  };
+
+  const handleButtonLeave = () => {
+    if (hoverStartTime) {
       const hoverDuration = Date.now() - hoverStartTime;
       if (hoverDuration > 500) { // Only track hovers longer than 500ms
         trackEvent('Discover Button Hover', {
           durationMs: hoverDuration
         });
       }
-    };
+    }
+    setHoverStartTime(null);
+    setIsButtonHovered(false);
+    setIsButtonClicked(false);
   };
 
   return (
@@ -93,14 +92,8 @@ const ButtonsAndOverlay: React.FC<ButtonsAndOverlayProps> = ({
         {!zoom && (
         <button
           onClick={handleDiscoverButton}
-          onMouseEnter={() => {
-            const cleanup = handleButtonHover();
-            return () => cleanup();
-          }}
-          onMouseLeave={() => {
-            setIsButtonHovered(false);
-            setIsButtonClicked(false);
-          }}
+          onMouseEnter={handleButtonHover}
+          onMouseLeave={handleButtonLeave}
           style={buttonStyle(isButtonHovered, isButtonClicked)}
         >
           Découvrir
