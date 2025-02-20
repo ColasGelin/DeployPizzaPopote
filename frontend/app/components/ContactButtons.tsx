@@ -4,6 +4,7 @@ import React, { ReactNode, useState, useEffect } from 'react';
 import { Chewy } from 'next/font/google';
 import { colors } from '../styles/styles';
 import { fetchWithAuth } from '../admin/utils/api';
+import { trackEvent } from '@/lib/utils';
 
 export const police = Chewy({ subsets: ['latin'], weight: '400' });
 
@@ -25,12 +26,30 @@ interface ContactInfo {
 const IconButton: React.FC<IconButtonProps> = ({ href, ariaLabel, children, shape, text, isCompact }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const handleClick = () => {
+    trackEvent('contact_click', {
+      type: ariaLabel,
+      text: text,
+      url: href
+    });
+  };
+
+  const handleHover = () => {
+    setIsHovered(true);
+    trackEvent('contact_hover', {
+      type: ariaLabel,
+      text: text
+    });
+  };
+
   return (
     <a
       href={href}
       aria-label={ariaLabel}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={handleClick} 
+      onMouseEnter={handleHover}
       style={{
         display: 'inline-flex',
         justifyContent: 'flex-start',
@@ -48,7 +67,6 @@ const IconButton: React.FC<IconButtonProps> = ({ href, ariaLabel, children, shap
         textDecoration: 'none',
         fontFamily: police.style.fontFamily,
       }}
-      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div style={{

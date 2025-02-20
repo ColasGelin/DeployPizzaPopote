@@ -5,7 +5,7 @@ import { UmamiAnalytics } from './components/UmamiAnalytics'
 
 async function generateMetadata(): Promise<Metadata> {
   const menuSchema = await generateMenuSchema()
-  
+
   const fullSchema = {
     '@context': 'https://schema.org',
     '@type': 'Restaurant',
@@ -48,7 +48,6 @@ async function generateMetadata(): Promise<Metadata> {
     keywords: 'pizzeria, pizza artisanale, produits locaux, restaurant convivial, pizzas maison, producteurs locaux, pizza authentique, restaurant sympathique',
     openGraph: {
       title: 'Pizza Po\'pote | Pizzeria artisanale et conviviale',
-      description: 'Découvrez nos pizzas artisanales préparées avec des produits frais de producteurs locaux.',
       url: 'https://pizzapopote.com',
       siteName: 'Pizza Po\'pote',
       images: [
@@ -78,7 +77,7 @@ async function generateMetadata(): Promise<Metadata> {
     },
     icons: {
       icon: [
-        { url: '/favicon/favicon.svg', type: 'image/svg+xml', sizes: '512x512'},
+        { url: '/favicon/favicon.svg', type: 'image/svg+xml', sizes: '512x512' },
       ],
       apple: [
         { url: '/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },

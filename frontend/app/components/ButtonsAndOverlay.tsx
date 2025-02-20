@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TabButtons } from './TabButtons';
 import ContactButtons from './ContactButtons';
 import TeamContent from './TeamContent';
 import { ScrollIndicator } from './ScrollIndicator';
 import { buttonStyle, resetButtonStyle } from '@/app/styles/styles';
 import LegalMentions from './LegalMentions';
+import {trackEvent }from '@/lib/utils';
 
 interface ButtonsAndOverlayProps {
   zoom: boolean;
@@ -37,6 +38,37 @@ const ButtonsAndOverlay: React.FC<ButtonsAndOverlayProps> = ({
 }) => {
   const [isLegalOpen, setIsLegalOpen] = useState(false);
 
+  useEffect(() => {
+    const loadTime = performance.now();
+    trackEvent('Landing Page Loaded', {
+      timeStamp: new Date().toISOString(),
+      loadTimeMs: Math.round(loadTime)
+    });
+  }, []);
+
+  // Track discover button interactions
+  const handleDiscoverButton = () => {
+    trackEvent('Discover Button Clicked', {
+      buttonState: isButtonHovered ? 'hovered' : 'direct_click'
+    });
+    handleDiscoverClickWithAnimation();
+  };
+
+  // Track hover duration
+  const handleButtonHover = () => {
+    const hoverStartTime = Date.now();
+    setIsButtonHovered(true);
+    
+    return () => {
+      const hoverDuration = Date.now() - hoverStartTime;
+      if (hoverDuration > 500) { // Only track hovers longer than 500ms
+        trackEvent('Discover Button Hover', {
+          durationMs: hoverDuration
+        });
+      }
+    };
+  };
+
   return (
     <>
       {(zoom || isExiting) && (
@@ -59,18 +91,21 @@ const ButtonsAndOverlay: React.FC<ButtonsAndOverlayProps> = ({
         transition: 'all 0.5s ease',
       }}>
         {!zoom && (
-          <button
-            onClick={handleDiscoverClickWithAnimation}
-            onMouseEnter={() => setIsButtonHovered(true)}
-            onMouseLeave={() => {
-              setIsButtonHovered(false);
-              setIsButtonClicked(false);
-            }}
-            style={buttonStyle(isButtonHovered, isButtonClicked)}
-          >
-            Découvrir
-          </button>
-        )}
+        <button
+          onClick={handleDiscoverButton}
+          onMouseEnter={() => {
+            const cleanup = handleButtonHover();
+            return () => cleanup();
+          }}
+          onMouseLeave={() => {
+            setIsButtonHovered(false);
+            setIsButtonClicked(false);
+          }}
+          style={buttonStyle(isButtonHovered, isButtonClicked)}
+        >
+          Découvrir
+        </button>
+      )}
       </div>
       <>
         <div style={{

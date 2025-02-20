@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '@/app/styles/TabButtons.module.css';
 import { police } from '../styles/fonts';
 import { colors } from '../styles/styles';
+import { trackEvent } from '@/lib/utils';
 
 interface TabButtonProps {
   title: string;
@@ -23,6 +24,29 @@ interface TabButtonsProps {
 const TabButton: React.FC<TabButtonProps> = ({isExiting, title, isActive, onClick, shape, delay }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const handleClick = () => {
+    trackEvent('Navigation Click', {
+      destination: title,
+      previousTab: isActive ? 'same_tab' : 'different_tab',
+    });
+    onClick(title);
+  };
+
+  const handleHover = () => {
+    setIsHovered(true);
+    const hoverStartTime = Date.now();
+    
+    return () => {
+      const hoverDuration = Date.now() - hoverStartTime;
+      if (hoverDuration > 300) { // Only track meaningful hovers
+        trackEvent('Navigation Hover', {
+          tab: title,
+          durationMs: hoverDuration
+        });
+      }
+    };
+  };
+
   const getColor = () => {
     if (isActive || isHovered) {
       if (title === 'Actualités') return colors.RED;
@@ -34,8 +58,11 @@ const TabButton: React.FC<TabButtonProps> = ({isExiting, title, isActive, onClic
 
   return (
     <button
-      onClick={() => onClick(title)}
-      onMouseEnter={() => setIsHovered(true)}
+      onClick={handleClick}
+      onMouseEnter={() => {
+        const cleanup = handleHover();
+        return () => cleanup();
+      }}
       onMouseLeave={() => setIsHovered(false)}
       className={`${styles.tabButton} ${isExiting ? styles.exiting : ''} ${styles.hoverGrow}`}
       style={{
