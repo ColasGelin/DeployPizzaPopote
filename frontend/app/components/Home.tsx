@@ -60,6 +60,29 @@ export default function Home() {
     };
   }, []);
 
+  // Handle URL hash fragment
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#nos-pizzas' && !isLoading) {
+        handleDiscoverClickWithAnimation();
+        setTimeout(() => {
+          handleTabClick('Nos pizzas');
+        }, 500); // Small delay to ensure discover animation completes
+      }
+    };
+
+    // Check hash on component mount
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [isLoading]);
+
   return (
     <>
       {isLoading && <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />}
